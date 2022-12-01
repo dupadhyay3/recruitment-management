@@ -26,24 +26,39 @@ const ForgetPassword = () => {
     );
     return (
         <>
-            <form onSubmit={(e) => handleSubmit(e)}>
-                <div className="bg-gray-400	">
-                    <div className="bg-red-400	">
-                        <h1>Welcome back</h1>
-                        <input
-                            type="email"
-                            className=""
-                            placeholder="email"
-                            onChange={(e) => {
-                                setemail(e.target.value);
-                            }}
-                        ></input>
-                        <button type="submit" className="">
-                           Reset
-                        </button>
-                    </div>
-                </div>
-            </form>
+         <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
+        <div className="w-full p-6 m-auto bg-white rounded-md shadow-xl shadow-gray-600/40 ring-2 ring-neutral-600 lg:max-w-xl">
+          <h1 className="text-3xl font-semibold text-center text-neutral-700 uppercase">
+            Login
+          </h1>
+          <form onSubmit={(e) => handleSubmit(e)} className="mt-6">
+            <div className="mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-semibold text-gray-800"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                placeholder="email"
+                onChange={(e) => {
+                  setemail(e.target.value);
+                }}
+                className="block w-full px-4 py-2 mt-2 text-neutral-700 bg-white border rounded-md focus:border-neutral-400 focus:ring-neutral-300 focus:outline-none focus:ring focus:ring-opacity-40"
+              />
+            </div>
+            <div className="mt-6">
+              <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-neutral-700 rounded-md hover:bg-neutral-600 focus:outline-none focus:bg-neutral-600">
+                Reset
+              </button>
+            </div>
+          </form>
+
+         
+        </div>
+      </div>
+            
         </>
     );
 };
