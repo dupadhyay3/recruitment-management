@@ -1,11 +1,12 @@
 import React from "react";
 import { useState, useCallback } from "react";
+import {useParams, useNavigate} from 'react-router-dom'
 import axios from "axios";
-// management/admin/login
+import {storeToken} from '../Services/LocalStorageService'
 const Login = () => {
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
-  const [check, setcheck] = useState(false);
+  const navigate=useNavigate()
 
   const handleSubmit = useCallback(
     (e: any) => {
@@ -13,11 +14,16 @@ const Login = () => {
         email: email,
         password: password,
       };
-
       axios
         .post(`http://localhost:5000/management/admin/login`, response)
         .then((res) => {
-          console.log("res", res);
+          if(res.data.status){
+            storeToken(res.data.token)
+            console.log(res.data.token);
+            alert('Login successfully');
+            navigate('/management/candidate/table')
+            
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -69,24 +75,7 @@ const Login = () => {
                 className="block w-full px-4 py-2 mt-2 text-neutral-700 bg-white border rounded-md focus:border-neutral-400 focus:ring-neutral-300 focus:outline-none focus:ring focus:ring-opacity-40"
               />
             </div>
-            <div className="mb-2 flex items-center justify-start">
-              <input
-                type="checkbox"
-                id="remember-me"
-                name="remember-me"
-                className="h-4 w-4 text-neutral-600 focus:ring-neutral-500
-                  border-gray-300 rounded"
-                onChange={(e) => {
-                  setcheck(e.target.checked);
-                }}
-              ></input>
-              <label
-                htmlFor="remember-me"
-                className="ml-2 block text-sm font-semibold text-gray-800"
-              >
-                Remember me
-              </label>
-            </div>
+           
             <div className="mt-6">
               <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-neutral-700 rounded-md hover:bg-neutral-600 focus:outline-none focus:bg-neutral-600">
                 Login
@@ -97,7 +86,7 @@ const Login = () => {
           <div className="flex items-center justify-between mt-5">
             <div className="text-sm">
               <a
-                href="http://localhost:3000/CreateAccount"
+                href="http://localhost:3000/management/create/account"
                 className="font-medium text-neutral-600 hover:underline"
               >
                 Create an Account?
@@ -105,7 +94,7 @@ const Login = () => {
             </div>
             <div className="text-sm">
               <a
-                href="http://localhost:3001/ForgetPassword"
+                href="http://localhost:3000/management/forget/password"
                 className="font-medium text-neutral-600 hover:underline"
               >
                 Forgot Password?

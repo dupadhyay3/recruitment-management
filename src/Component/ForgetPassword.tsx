@@ -50,7 +50,7 @@ const ForgetPassword = () => {
             </div>
             <div className="mt-6">
               <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-neutral-700 rounded-md hover:bg-neutral-600 focus:outline-none focus:bg-neutral-600">
-                Reset
+                Send
               </button>
             </div>
           </form>
