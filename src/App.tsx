@@ -5,12 +5,18 @@ import ForgetPassword from './Component/ForgetPassword';
 import CreateAccount from './Component/CreateAccount';
 import ResetPassword from './Component/ResetPassword';
 import CandidateTable from './Component/CandidateTable';
+import Dashboard from './Component/Dashboard';
+import Changepassword from './Component/Changepassword';
+import Logout from './Component/Logout';
 function App() {
   return (
     <>
      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login/>} />
+          <Route path="/management/logout" element={<Logout/>} />
+          <Route path="management/dashboard" element={<Dashboard/>} />
+          <Route path="management/admin/change" element={<Changepassword/>} />
           <Route path="management/forget/password" element={<ForgetPassword/>} />
           <Route path="management/create/account" element={<CreateAccount/>} />
           <Route path="management/reset/password/:id/:token" element={<ResetPassword/>} />
