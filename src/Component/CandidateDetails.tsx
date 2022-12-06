@@ -1,6 +1,5 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 interface Candidatedata {
   firstName: string;
@@ -19,11 +18,8 @@ interface Candidatedata {
   collegeId: String;
 }
 
-const CandidateTable = () => {
-  const navigate=useNavigate()
-const  CandidatafullInfo = () => {
-  navigate('/candidateall-table')
-  };
+const CandidateAll = () => {
+ 
 
   const [data, setData] = useState<Candidatedata[]>([]);
   useEffect(() => {
@@ -47,22 +43,33 @@ const  CandidatafullInfo = () => {
             <th>Dob</th>
             <th>MobileNo</th>
             <th>CollegeName</th>
-            <th>Batch</th>
+            <th>educationDetails</th>
+            <th>areaOfIntrest</th>
+            <th>futureGoal</th>
+            <th>currentAddress</th>
+            <th>experience</th>
+            <th>batch</th>
+            <th>collegeId</th>
           </tr>
         </thead>
         <tbody>
           {data.map((data) => {
-            console.log("dataaaaaaaaaaa",data);
+            console.log(data);
 
             return (
               <tr>
-                <button onClick={CandidatafullInfo}><td>{data.firstName} {data.middleName} {data.lastName}</td></button>
-                
+                <td>{data.firstName} {data.middleName} {data.lastName}</td>
                 <td>{data.email}</td>
                 <td>{data.dob}</td>
                 <td>{data.mobileNo}</td>
                 <td>{data.collegeName}</td>
                 <td>{data.batch}</td>
+                <td>{data.educationDetails}</td>
+                <td>{data.areaOfIntrest}</td>
+                <td>{data.futureGoal}</td>
+                <td>{data.currentAddress}</td>
+                <td>{data.experience}</td>
+                <td>{data.collegeId}</td>
               </tr>
             );
           })}
@@ -72,4 +79,4 @@ const  CandidatafullInfo = () => {
   );
 };
 
-export default CandidateTable;
+export default CandidateAll;

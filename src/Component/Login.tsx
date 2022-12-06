@@ -52,8 +52,9 @@ const Login = () => {
             Login
           </h1>
           <form onSubmit={(e) => handleSubmit(e)} className="mt-6">
-            {/* <InputField data={()=>{}} /> */}
-            <div className="mb-2">
+            <InputField labelText={"Email"} inputType={"email"} inputName={"email"} inputValue={email} inputPlaceHolder={"email"}
+             onChange={setemail} id={"email"} />
+            {/* <div className="mb-2">
               <label
                 htmlFor="email"
                 className="block text-sm font-semibold text-gray-800"
@@ -68,7 +69,7 @@ const Login = () => {
                 }}
                 className="block w-full px-4 py-2 mt-2 text-neutral-700 bg-white border rounded-md focus:border-neutral-400 focus:ring-neutral-300 focus:outline-none focus:ring focus:ring-opacity-40"
               />
-            </div>
+            </div> */}
             <div className="mb-2">
               <label
                 htmlFor="password"
