@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useCallback } from "react";
 import axios from "axios";
+import InputField from "../shared/Input";
 const ForgetPassword = () => {
     const [email, setemail] = useState("");
     const handleSubmit = useCallback(
@@ -32,7 +33,9 @@ const ForgetPassword = () => {
             Forgot Password
           </h1>
           <form onSubmit={(e) => handleSubmit(e)} className="mt-6">
-            <div className="mb-2">
+          <InputField labelText={"Email"} inputType={"email"} inputName={"email"} inputValue={email} inputPlaceHolder={"email"}
+             onChange={setemail} id={"email"} />
+            {/* <div className="mb-2">
               <label
                 htmlFor="email"
                 className="block text-sm font-semibold text-gray-800"
@@ -47,7 +50,7 @@ const ForgetPassword = () => {
                 }}
                 className="block w-full px-4 py-2 mt-2 text-neutral-700 bg-white border rounded-md focus:border-neutral-400 focus:ring-neutral-300 focus:outline-none focus:ring focus:ring-opacity-40"
               />
-            </div>
+            </div> */}
             <div className="mt-6">
               <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-neutral-700 rounded-md hover:bg-neutral-600 focus:outline-none focus:bg-neutral-600">
                 Send

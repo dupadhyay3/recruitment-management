@@ -3,9 +3,11 @@ import { useCallback, useState } from 'react'
 import {useParams, useNavigate} from 'react-router-dom'
 import axios from 'axios'
 import { storeToken } from '../Services/LocalStorageService'
+import InputField from '../shared/Input'
 const ResetPassword = () => {
 const [password, setPassword] = useState("")
 const [password_confirmation, setConfirm_password] = useState("")
+
 const {id, token}= useParams()
 console.log("hgfgf",id, token);
 const navigate=useNavigate()
@@ -44,7 +46,9 @@ const navigate=useNavigate()
             Reset Password
           </h1>
           <form onSubmit={(e) => handleSubmit(e)} className="mt-6">
-            <div className="mb-2">
+          <InputField labelText={"Password"} inputType={"Password"} inputName={"Password"} inputValue={password} inputPlaceHolder={"Password"}
+             onChange={setPassword} id={"Password"} />
+            {/* <div className="mb-2">
               <label
                 htmlFor="Password"
                 className="block text-sm font-semibold text-gray-800"
@@ -59,13 +63,15 @@ const navigate=useNavigate()
                   setPassword(e.target.value);
                 }}
               />
-            </div>
-            <div className="mb-2">
+            </div> */}
+            <InputField labelText={"Confirm Password"} inputType={"Password"} inputName={"confirm_password"} inputValue={password} inputPlaceHolder={"confirm_password"}
+             onChange={setConfirm_password} id={"confirm_password"} />
+            {/* <div className="mb-2">
               <label
                 htmlFor="confirm_password"
                 className="block text-sm font-semibold text-gray-800"
               >
-                Password
+               Confirm Password
               </label>
               <input
                 type="password"
@@ -75,7 +81,7 @@ const navigate=useNavigate()
                   setConfirm_password(e.target.value);
                 }}
               />
-            </div>
+            </div> */}
 
             <div className="mt-6">
               <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-neutral-700 rounded-md hover:bg-neutral-600 focus:outline-none focus:bg-neutral-600">
