@@ -25,7 +25,6 @@ const CandidateTable = () => {
   const navigate = useNavigate();
   
   const  CandidatafullInfo = (id?:String) => {
-    console.log("candidateIddddddd",id);
     navigate(`/candidateall-table/${id}`)
     };
 
@@ -48,43 +47,12 @@ const CandidateTable = () => {
       .catch((err) => {
         console.log(err);
       });
-  });
+  }, []);
   return (
     <>
      <div>
-      <Table rows={rows} onClickName={CandidatafullInfo} columns={columns} />
+      <Table rowsPerPage={15} rows={rows} onClickName={CandidatafullInfo} columns={columns} />
     </div> 
-
-      {/* <table>
-        <thead className="thead-light">
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Dob</th>
-            <th>MobileNo</th>
-            <th>CollegeName</th>
-            <th>Batch</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((data, index) => {
-            // console.log("dataaaaaaaaaaa",data);
-
-            return (
-              <tr key={index}>
-                <td onClick={CandidatafullInfo}>
-                  {data.firstName} {data.middleName} {data.lastName}
-                </td>
-                <td>{data.email}</td>
-                <td>{data.dob}</td>
-                <td>{data.mobileNo}</td>
-                <td>{data.collegeName}</td>
-                <td>{data.batch}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table> */}
     </>
   );
 };

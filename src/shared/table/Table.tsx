@@ -2,11 +2,10 @@ import { useState, useMemo } from 'react'
 import { sortRows, filterRows, paginateRows } from './helpers'
 import { Pagination } from './Pagination'
 
-export const Table = ({ columns, rows, onClickName} : any) => {
+export const Table = ({ columns, rows, onClickName, rowsPerPage} : any) => {
   const [activePage, setActivePage] = useState(1)
   const [filters, setFilters] = useState<any>({})
   const [sort, setSort] = useState({ order: 'asc', orderBy: 'id' })
-  const rowsPerPage = 15
 
   const filteredRows = useMemo(() => filterRows(rows, filters), [rows, filters])
   const sortedRows = useMemo(() => sortRows(filteredRows, sort), [filteredRows, sort])
