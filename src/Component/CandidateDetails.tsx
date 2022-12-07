@@ -336,4 +336,3 @@ const CandidateAll:any = () => {
 
 export default CandidateAll;
 
-

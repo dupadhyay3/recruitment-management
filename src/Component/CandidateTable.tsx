@@ -2,48 +2,60 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import CandidateAll from './CandidateDetails'
+import { Table } from "../shared/table/Table";
 interface ICandidatedata {
   firstName: string;
   middleName: String;
   lastName: String;
   email: String;
   dob: String;
-  mobileNo:String;
+  mobileNo: String;
   educationDetails: String;
   areaOfIntrest: String;
   futureGoal: String;
   currentAddress: String;
   collegeName: String;
-  experience:String;
+  experience: String;
   batch: String;
   collegeId: String;
-  _id?:String
+  _id?: String
 }
 
 const CandidateTable = () => {
-  const navigate=useNavigate()
-
-  const [data, setData] = useState<ICandidatedata[]>([]);
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/management/candidate/get`)
-      .then((res: any) => {
-        // console.log("res", res);
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
+  const navigate = useNavigate();
+  
   const  CandidatafullInfo = (id?:String) => {
     console.log("candidateIddddddd",id);
     navigate(`/candidateall-table/${id}`)
     };
 
+  const columns = [
+    { accessor: 'firstName', label: 'Name' },
+    { accessor: 'email', label: 'Email' },
+    { accessor: 'dob', label: 'Dob' },
+    { accessor: 'mobileNo', label: 'MobileNo' },
+    { accessor: 'collegeName', label: 'CollegeName' },
+    { accessor: 'batch', label: 'Batch' },
+  ]
+
+  const [rows, setRows] = useState<ICandidatedata[]>([]);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/management/candidate/get`)
+      .then((res: any) => {
+        setRows(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
   return (
     <>
-      <table>
+     <div>
+      <Table rows={rows} onClickName={CandidatafullInfo} columns={columns} />
+    </div> 
+
+      {/* <table>
         <thead className="thead-light">
           <tr>
             <th>Name</th>
@@ -55,22 +67,27 @@ const CandidateTable = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((data) => {
+          {rows.map((data, index) => {
             // console.log("dataaaaaaaaaaa",data);
+
             return (
-              <tr>
-                <td onClick={()=>CandidatafullInfo(data?._id)}>{data.firstName} {data.middleName} {data.lastName}</td>
+              <tr key={index}>
+                <td onClick={CandidatafullInfo}>
+                  {data.firstName} {data.middleName} {data.lastName}
+                </td>
                 <td>{data.email}</td>
                 <td>{data.dob}</td>
                 <td>{data.mobileNo}</td>
                 <td>{data.collegeName}</td>
-                </tr>
+                <td>{data.batch}</td>
+              </tr>
             );
           })}
         </tbody>
-      </table>
+      </table> */}
     </>
   );
 };
 
 export default CandidateTable;
+
