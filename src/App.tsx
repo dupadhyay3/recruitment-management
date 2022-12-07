@@ -22,7 +22,7 @@ function App() {
           <Route path="/create-account" element={<CreateAccount/>} />
           <Route path="/reset-password/:id/:token" element={<ResetPassword/>} />
           <Route path="/candidate-table" element={<CandidateTable/>} />
-          <Route path="/candidateall-table" element={<CandidateAll/>} />
+          <Route path="/candidateall-table/:id" element={<CandidateAll/>} />
           {/* <Route path="/*" element={ <h1>404 page not found</h1>}/>  */}
           {/* <Route path="/*" element={<Navigate to="/login" />} /> */}
         </Routes>

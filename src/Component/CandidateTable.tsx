@@ -2,7 +2,8 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-interface Candidatedata {
+import CandidateAll from './CandidateDetails'
+interface ICandidatedata {
   firstName: string;
   middleName: String;
   lastName: String;
@@ -17,26 +18,29 @@ interface Candidatedata {
   experience:String;
   batch: String;
   collegeId: String;
+  _id?:String
 }
 
 const CandidateTable = () => {
   const navigate=useNavigate()
-const  CandidatafullInfo = () => {
-  navigate('/candidateall-table')
-  };
 
-  const [data, setData] = useState<Candidatedata[]>([]);
+  const [data, setData] = useState<ICandidatedata[]>([]);
   useEffect(() => {
     axios
       .get(`http://localhost:5000/management/candidate/get`)
       .then((res: any) => {
-        console.log("res", res);
+        // console.log("res", res);
         setData(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   });
+  const  CandidatafullInfo = (id?:String) => {
+    console.log("candidateIddddddd",id);
+    navigate(`/candidateall-table/${id}`)
+    };
+
   return (
     <>
       <table>
@@ -52,18 +56,15 @@ const  CandidatafullInfo = () => {
         </thead>
         <tbody>
           {data.map((data) => {
-            console.log("dataaaaaaaaaaa",data);
-
+            // console.log("dataaaaaaaaaaa",data);
             return (
               <tr>
-                <button onClick={CandidatafullInfo}><td>{data.firstName} {data.middleName} {data.lastName}</td></button>
-                
+                <td onClick={()=>CandidatafullInfo(data?._id)}>{data.firstName} {data.middleName} {data.lastName}</td>
                 <td>{data.email}</td>
                 <td>{data.dob}</td>
                 <td>{data.mobileNo}</td>
                 <td>{data.collegeName}</td>
-                <td>{data.batch}</td>
-              </tr>
+                </tr>
             );
           })}
         </tbody>

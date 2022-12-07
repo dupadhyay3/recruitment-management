@@ -28,7 +28,7 @@ const Login = () => {
             console.log(res.data.token);
             // setSuccess("Login successfully")
             alert("Login successfully");
-            // navigate('/management/candidate/table')
+            navigate('/candidate-table')
           }
           else{
             alert("Login failed")
@@ -98,7 +98,7 @@ const Login = () => {
           <div className="flex items-center justify-between mt-5">
             <div className="text-sm">
               <a
-                href="http://localhost:3000/management/create/account"
+                href="http://localhost:3000/create-account"
                 className="font-medium text-neutral-600 hover:underline"
               >
                 Create an Account?
@@ -106,7 +106,7 @@ const Login = () => {
             </div>
             <div className="text-sm">
               <a
-                href="http://localhost:3000/management/forget/password"
+                href="http://localhost:3000/forget-password"
                 className="font-medium text-neutral-600 hover:underline"
               >
                 Forgot Password?
