@@ -16,7 +16,7 @@ const Login = () => {
         password: password,
       };
       axios
-        .post(`http://localhost:5000/management/admin/login`, response)
+        .post(`${process.env.REACT_APP_API}/management/admin/login`, response)
         .then((res) => {
           console.log(res, "resssssssssssss");
 

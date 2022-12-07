@@ -10,7 +10,7 @@ const ForgetPassword = () => {
             };
             axios
                 .post(
-                    `http://localhost:5000/management/send-reset-password-email`,
+                    `${process.env.REACT_APP_API}/management/send-reset-password-email`,
                     response
                 )
                 .then((res) => {

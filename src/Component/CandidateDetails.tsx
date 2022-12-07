@@ -42,7 +42,7 @@ const CandidateAll:any = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/management/candidateall/get/${id}`)
+      .get(`${process.env.REACT_APP_API}/management/candidateall/get/${id}`)
       .then((res: any) => {
         console.log("res", res);
         if (

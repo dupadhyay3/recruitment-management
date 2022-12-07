@@ -16,7 +16,7 @@ const navigate=useNavigate()
         password_confirmation: password_confirmation,
       };
       axios
-        .post(`http://localhost:5000/management/reset/password/${id}/${token}`,response)
+        .post(`${process.env.REACT_APP_API}/management/reset/password/${id}/${token}`,response)
         .then((res) => {
           if(res.data.status){
             storeToken(`${token}`)

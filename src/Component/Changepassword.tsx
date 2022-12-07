@@ -17,7 +17,7 @@ const Changepassword = () => {
           let token = getToken()
         
           axios
-            .post(`http://localhost:5000/management/admin/change`, {
+            .post(`${process.env.REACT_APP_API}/management/admin/change`, {
                 body: response,
                 
              },{headers: {

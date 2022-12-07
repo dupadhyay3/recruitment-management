@@ -41,7 +41,7 @@ const CandidateTable = () => {
   const [rows, setRows] = useState<ICandidatedata[]>([]);
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/management/candidate/get`)
+      .get(`${process.env.REACT_APP_API}/management/candidate/get`)
       .then((res: any) => {
         setRows(res.data);
       })
