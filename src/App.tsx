@@ -9,9 +9,11 @@ import Dashboard from './Component/Dashboard';
 import Changepassword from './Component/Changepassword';
 import Logout from './Component/Logout';
 import CandidateAll from './Component/CandidateDetails';
+import Header from './Component/header';
 function App() {
   return (
     <>
+     <Header />
      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login/>} />

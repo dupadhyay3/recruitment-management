@@ -1,12 +1,15 @@
-import React from 'react'
-import { removeToken } from '../Services/LocalStorageService'
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { removeToken } from "../Services/LocalStorageService";
 const Logout = () => {
-  removeToken('token')
-  return (
-   <>
-   alert("logout successfully")
-   </>
-  )
-}
+  const navigate = useNavigate();
 
-export default Logout
+  useEffect(() => {
+    removeToken("token");
+    navigate("/");
+  }, []);
+
+  return <></>;
+};
+
+export default Logout;
