@@ -67,7 +67,7 @@ function Header(props: any) {
                       : "text-gray-800 hover:text-gray-600") +
                     " px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
                   }
-                  href="/candidateall-table"
+                  href="/question-table"
                 >
                   <i
                     className={
