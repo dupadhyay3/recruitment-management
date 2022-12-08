@@ -28,7 +28,7 @@ const Login = () => {
             console.log(res.data.token);
             // setSuccess("Login successfully")
             alert("Login successfully");
-            navigate('/candidatetable')
+            navigate('/candidate-table')
           }
           else{
             alert("Login failed")

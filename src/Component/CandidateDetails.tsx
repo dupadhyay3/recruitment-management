@@ -1,8 +1,11 @@
 import React from "react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import'../shared/css/common.css'
+import "../shared/css/common.css";
+import InputField from "../shared/Input";
+import Textarea from "../shared/textarea";
+import Dropdawn from "../shared/dropdawn";
 interface ICandidatedata {
   firstName?: string;
   middleName?: String;
@@ -22,81 +25,78 @@ interface ICandidatedata {
 }
 
 const CandidateAll: any = () => {
-  const firstNameRef = useRef<HTMLInputElement>(null);
-  const middleNameRef = useRef<HTMLInputElement>(null);
-  const lastNameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const phoneRef = useRef<HTMLInputElement>(null);
-  const collegeNameRef = useRef<HTMLSelectElement>(null);
-  const experienceRef = useRef<HTMLSelectElement>(null);
-  const dateOfBirthRef = useRef<HTMLInputElement>(null);
-  const educationDetailsRef = useRef<HTMLTextAreaElement>(null);
-  const areaOfInterestRef = useRef<HTMLTextAreaElement>(null);
-  const futureGoalRef = useRef<HTMLTextAreaElement>(null);
-  const currentAddressRef = useRef<HTMLTextAreaElement>(null);
-  const { id } = useParams();
-  // console.log("ONEiddddddd", id);
-
   const [data, setData] = useState<ICandidatedata>({});
   const [collegeNames, setcollegeNames] = useState<any[]>([]);
-  console.log("collegeNames", collegeNames);
+  const experienceArr = [
+    {
+      name : '0'
+    },
+    {
+      name : '1-2'
+    },{
+      name : '2-3'
+    },{
+      name : '3-4'
+    },
+  ]
+  const [firstName, setfirstName] = useState<String>("");
+  const [middleName, setmiddleName] = useState<String>("");
+  const [lastName, setlastName] = useState<String>("");
+  const [email, setemail] = useState<String>("");
+  const [dob, setdob] = useState<String>("");
+  const [mobileNo, setmobileNo] = useState<String>("");
+  const [educationDetails, seteducationDetails] = useState<String>("");
+  const [areaOfIntrest, setareaOfIntrest] = useState<String>("");
+  const [futureGoal, setfutureGoal] = useState<String>("");
+  const [currentAddress, setcurrentAddress] = useState<String>("");
+  const [collegeName, setcollegeName] = useState<String>("");
+  const [experience, setexperience] = useState<String>("");
+  const [batch, setbatch] = useState<String>("");
+  const [collegeId, setcollegeId] = useState<String>("");
+  const [_id, set_id] = useState<String>("");
+
+  const { id } = useParams();
+  console.log("data", data);
+
+  //   console.log("DataCANDIDATE  ", data);
+  console.log("DOB", dob);
+
+  // console.log("newdate",newdate);
 
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API}/management/candidateall/get/${id}`)
       .then((res: any) => {
-        // console.log("res", res);
-        setTimeout(() => {
-          axios
-            .get(`${process.env.REACT_APP_API}/users/college/get`)
-            .then((res) => {
-              console.log("/users/college/get");
-              setcollegeNames(res?.data);
-            });
-          
         setData(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
+
+    axios.get(`${process.env.REACT_APP_API}/users/college/get`).then((res) => {
+      // console.log("/users/college/get");
+      setcollegeNames(res?.data);
+    });
   }, []);
 
   useEffect(() => {
-    if (
-      firstNameRef?.current &&
-      middleNameRef?.current &&
-      lastNameRef?.current &&
-      emailRef?.current &&
-      phoneRef?.current &&
-      collegeNameRef?.current &&
-      experienceRef?.current &&
-      dateOfBirthRef?.current &&
-      educationDetailsRef?.current &&
-      areaOfInterestRef?.current &&
-      futureGoalRef?.current &&
-      currentAddressRef?.current
-    ) {
-      console.log("inside");
-      firstNameRef.current.value = data.firstName;
-      middleNameRef.current.value = data.middleName;
-      lastNameRef.current.value = data.lastName;
-      emailRef.current.value = data.email;
-      phoneRef.current.value = data.mobileNo;
-      collegeNameRef.current.value = data.collegeName;
-      experienceRef.current.value = data.experience;
-      dateOfBirthRef.current.value = data.dob;
-      educationDetailsRef.current.value = data.educationDetails;
-      areaOfInterestRef.current.value = data.areaOfIntrest;
-      futureGoalRef.current.value = data.futureGoal;
-      currentAddressRef.current.value = data.currentAddress;
-      console.log("collegeNameRef", data.collegeName, "collegeNameRef");
-      console.log("dateOfBirthRef", data.dob, "dateOfBirthRef");
-      console.log("experienceRef", data.experience, "experienceRef");
-      // console.log("educationDetailsRef", educationDetailsRef.current.value, "educationDetailsRef");
-    }
-  }, 3000);
+    setfirstName(data.firstName ? data.firstName : "");
+    setmiddleName(data.middleName ? data.middleName : "");
+    setlastName(data.lastName ? data.lastName : "");
+    let date = data.dob ? data.dob : "";
+    let newdate = date.split("-").reverse().join("-");
+    setdob(newdate);
+    setemail(data.email ? data.email : "");
+    setmobileNo(data.mobileNo ? data.mobileNo : "");
+    setcurrentAddress(data.currentAddress ? data.currentAddress : "");
+    seteducationDetails(data.educationDetails ? data.educationDetails : "");
+    setareaOfIntrest(data.areaOfIntrest ? data.areaOfIntrest : "");
+    setfutureGoal(data.futureGoal ? data.futureGoal : "");
+    setcollegeName(data.collegeName ? data.collegeName : "");
+    setexperience(data.experience ? data.experience : "");
+    
+  }, [data]);
 
-  }, [data])
   return (
     <>
       <div className="registration-from-main">
@@ -105,53 +105,52 @@ const CandidateAll: any = () => {
           {/* onSubmit={(e) => onSubmit(e)} */}
           <div className="rgstr-from-group">
             <div className="form-group form-group3">
-              <label htmlFor="firstName">Full Name</label>
               <div className="form-group-inner">
                 <div className="cmn-form-control">
-                  {/* <span className="form-tagname">Firstname</span> */}
-                  <input
-                    id="firstName"
-                    placeholder="FirstName"
-                    type="text"
-                    className="form-control"
-                    ref={firstNameRef}
-                    required
+                  <InputField
+                    labelText={"FirstName"}
+                    inputType={"text"}
+                    inputName={"FirstName"}
+                    inputValue={firstName}
+                    inputPlaceHolder={"FirstName"}
+                    onChange={setfirstName}
+                    id={"firstName"}
                   />
                 </div>
                 <div className="cmn-form-control">
-                  {/* <span className="form-tagname">Middlename</span> */}
-                  <input
-                    id="middleName"
-                    placeholder="MiddleName"
-                    type="text"
-                    className="form-control"
-                    ref={middleNameRef}
-                    required
+                  <InputField
+                    labelText={"MiddleName"}
+                    inputType={"text"}
+                    inputName={"MiddleName"}
+                    inputValue={middleName}
+                    inputPlaceHolder={"MiddleName"}
+                    onChange={setmiddleName}
+                    id={"middleName"}
                   />
                 </div>
                 <div className="cmn-form-control">
-                  {/* <span className="form-tagname">Lastname</span> */}
-                  <input
-                    id="lastName"
-                    placeholder="LastName"
-                    type="text"
-                    className="form-control"
-                    ref={lastNameRef}
-                    required
+                  <InputField
+                    labelText={"LastName"}
+                    inputType={"text"}
+                    inputName={"LastName"}
+                    inputValue={lastName}
+                    inputPlaceHolder={"LastName"}
+                    onChange={setlastName}
+                    id={"lastName"}
                   />
                 </div>
               </div>
             </div>
             <div className="form-group">
-              <label htmlFor="dateOfBirth">Date of Birth</label>
               <div className="form-group-inner">
                 <div className="cmn-form-control">
-                  {/* <span className="form-tagname">Date</span> */}
-                  <input
-                    id="dateOfBirth"
-                    placeholder="DateOfBirth"
-                    type="date"
-                    className="form-control"
+                  <InputField
+                    labelText={"Date of Birth"}
+                    inputType={"date"}
+                    inputName={"dob"}
+                    inputValue={dob}
+                    inputPlaceHolder={"Date of birth"}
+                    onChange={setdob}
                     max={`${new Date().getFullYear() - 18}-${
                       (new Date().getMonth() + 1).toString().length > 1
                         ? new Date().getMonth() + 1
@@ -161,48 +160,58 @@ const CandidateAll: any = () => {
                         ? new Date().getDate()
                         : "0" + new Date().getDate()
                     }`}
-                    ref={dateOfBirthRef}
-                    required
+                    id={"dob"}
                   />
                 </div>
               </div>
             </div>
             <div className="form-group ">
-              <label htmlFor="email">Email Address</label>
               <div className="form-group-inner">
                 <div className="cmn-form-control">
-                  <input
-                    id="email"
-                    placeholder="Email"
-                    type="email"
-                    className="form-control"
-                    ref={emailRef}
-                    required
-                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                  <InputField
+                    labelText={"Email"}
+                    inputType={"email"}
+                    inputName={"email"}
+                    inputValue={email}
+                    inputPlaceHolder={"email"}
+                    onChange={setemail}
+                    id={"email"}
                   />
                 </div>
               </div>
             </div>
             <div className="form-group">
-              <label htmlFor="phone">Mobile No.</label>
+              {/* <label htmlFor="phone">Mobile No.</label> */}
               <div className="form-group-inner">
                 <div className="cmn-form-control">
-                  <input
+                  {/* <input
                     id="phone"
                     placeholder="Mobile No"
                     type="text"
                     className="form-control"
                     // onChange={(e) => handleOnChangePhone(e)}
-                    ref={phoneRef}
+                    // ref={phoneRef}
+                    
+                    required
+                  /> */}
+                  <InputField
+                    labelText={"Mobile NO."}
+                    inputType={"text"}
+                    inputName={"phone"}
+                    inputValue={mobileNo}
+                    inputPlaceHolder={"mobileNo"}
                     minLength={10}
                     maxLength={10}
-                    required
+                    onChange={setmobileNo}
+                    id={"phone"}
                   />
                 </div>
               </div>
             </div>{" "}
-            <div className="form-group">
-              <label htmlFor="collegeName">College Name {collegeNameRef.current?.value}</label>
+            {/* <div className="form-group">
+              <label htmlFor="collegeName">
+                College Name {collegeNameRef.current?.value}
+              </label>
               <div className="form-group-inner">
                 <div className="cmn-form-control">
                   <select
@@ -214,15 +223,16 @@ const CandidateAll: any = () => {
                   >
                     <option value="">Select College Name </option>
                     {collegeNames.map((obj, index) => (
-                <option key={index} value={obj.collegeName}>
-                  {obj.collegeName}
-                </option>
-              ))}
+                      <option key={index} value={obj.collegeName}>
+                        {obj.collegeName}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
-            </div>
-            <div className="form-group">
+            </div> */}
+            <Dropdawn inputType={"option"} id={"collegeName"} name={"collegeName"} labelText={"College Name"} dropdownArr={collegeNames} Select={"Select college"} inputValue={collegeName}/>
+            {/* <div className="form-group">
               <label htmlFor="experience">Experience</label>
               <div className="form-group-inner">
                 <div className="cmn-form-control">
@@ -230,7 +240,7 @@ const CandidateAll: any = () => {
                     name="experience"
                     id="experience"
                     className="form-control"
-                    ref={experienceRef}
+                    // ref={experienceRef}
                     required
                   >
                     <option value="">Select Experience</option>
@@ -244,62 +254,87 @@ const CandidateAll: any = () => {
                   </select>
                 </div>
               </div>
-            </div>
+            </div> */}
+            <Dropdawn inputType={"option"} id={"exerience"} name={"experience"} labelText={"Experience"} dropdownArr={experienceArr} Select={"Select Experience"} inputValue={experience}/>
             <div className="form-group">
-              <label htmlFor="currentAddress">Current Address</label>
+              {/* <label htmlFor="currentAddress">Current Address</label> */}
               <div className="form-group-inner">
                 <div className="cmn-form-control">
-                  <textarea
+                  {/* <textarea
                     id="currentAddress"
                     placeholder="CurrentAddress"
                     className="form-control"
-                    ref={currentAddressRef}
+                    // ref={currentAddressRef}
                     required
-                  ></textarea>
+                  ></textarea> */}
+                  <Textarea labelText={"currentAddress"}
+                    inputName={"currentAddress"}
+                    inputValue={currentAddress}
+                    inputPlaceHolder={"currentAddress"}
+                    onChange={setcurrentAddress}
+                id={"currentAddress"}  rows={"4"} class={"form-control"}    />
                 </div>
               </div>
             </div>
             <div className="form-group">
-              <label htmlFor="educationDetails">
+              {/* <label htmlFor="educationDetails">
                 Education Details : Last Semester Grade
-              </label>
+              </label> */}
               <div className="form-group-inner">
                 <div className="cmn-form-control">
-                  <textarea
+                  {/* <textarea
                     id="educationDetails"
                     placeholder="EducationDetails"
                     className="form-control"
-                    ref={educationDetailsRef}
+                    // ref={educationDetailsRef}
                     required
-                  ></textarea>
+                  ></textarea> */}
+                  <Textarea labelText={"Education Details : Last Semester Grade"}
+                    inputName={"educationDetails"}
+                    inputValue={educationDetails}
+                    inputPlaceHolder={"EducationDetails"}
+                    onChange={seteducationDetails}
+                id={"educationDetails"} rows={"4"} class={"form-control"}    />
                 </div>
               </div>
             </div>
             <div className="form-group">
-              <label htmlFor="areaOfInterest">Area of Interest</label>
+              {/* <label htmlFor="areaOfInterest">Area of Interest</label> */}
               <div className="form-group-inner">
                 <div className="cmn-form-control">
-                  <textarea
+                  {/* <textarea
                     id="areaOfInterest"
                     placeholder="AreaOfInterest"
                     className="form-control"
-                    ref={areaOfInterestRef}
+                    // ref={areaOfInterestRef}
                     required
-                  ></textarea>
+                  ></textarea> */}
+                  <Textarea labelText={"Area of Interest"}
+                    inputName={"areaOfInterest"}
+                    inputValue={areaOfIntrest}
+                    inputPlaceHolder={"AreaOfInterest"}
+                    onChange={setareaOfIntrest}
+                id={"areaOfInterest"}  rows={"4"} class={"form-control"}    />
                 </div>
               </div>
             </div>
             <div className="form-group">
-              <label htmlFor="futureGoal">Future Goal</label>
+              {/* <label htmlFor="futureGoal">Future Goal</label> */}
               <div className="form-group-inner">
                 <div className="cmn-form-control">
-                  <textarea
+                  {/* <textarea
                     id="futureGoal"
                     placeholder="FutureGoal"
                     className="form-control"
-                    ref={futureGoalRef}
+                    // ref={futureGoalRef}
                     required
-                  ></textarea>
+                  ></textarea> */}
+                  <Textarea labelText={"Future Goal"}
+                    inputName={"futureGoal"}
+                    inputValue={futureGoal}
+                    inputPlaceHolder={"FutureGoal"}
+                    onChange={setfutureGoal}
+                id={"futureGoal"}  rows={"4"} class={"form-control"}    />
                 </div>
               </div>
             </div>
@@ -360,4 +395,3 @@ const CandidateAll: any = () => {
 };
 
 export default CandidateAll;
-

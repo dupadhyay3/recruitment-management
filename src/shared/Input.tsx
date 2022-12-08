@@ -9,7 +9,10 @@ interface IInputField {
   inputValue?:String;
   inputPlaceHolder?:String;
   onChange?:any;
+  max?:any
   inputClassName?:String;
+  minLength?:any;
+  maxLength?:any;
   id:String;
 }
 const InputField: FC<IInputField> = ({
@@ -21,7 +24,10 @@ const InputField: FC<IInputField> = ({
   inputValue,
   inputPlaceHolder,
   onChange,
+  max,
   inputClassName,
+  minLength,
+  maxLength,
   id,
 }) => {
   return (
@@ -41,9 +47,12 @@ const InputField: FC<IInputField> = ({
         name={`${inputName}`}
         value={`${inputValue}`}
         placeholder={`${inputPlaceHolder}`}
+        max={`${max}`}
         onChange={(e) => {
           onChange(e.target.value);
         }}
+        minLength={minLength}
+        maxLength={maxLength}
         className={cn(
           "block w-full px-4 py-2 mt-2 text-neutral-700 bg-white border rounded-md focus:border-neutral-400 focus:ring-neutral-300 focus:outline-none focus:ring focus:ring-opacity-40",
           `${inputClassName}`
