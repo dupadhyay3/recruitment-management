@@ -4,7 +4,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 // import  from "./  assets/images/ring-36.svg";
 import Spinner from "./../assets/images/ring-36.svg";
-import InputField from "./Input";
+import InputField from "../shared/Input";
 
 interface IQuestiondata {
   question?: string;

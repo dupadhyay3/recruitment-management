@@ -12,20 +12,24 @@ import CandidateAll from './Component/CandidateDetails';
 import Header from './Component/header';
 import QuestionTable from './Component/QuestionTable';
 import QuestionDetail from './Component/QuestionDetails';
-
+import { getToken } from './Services/LocalStorageService';
 function App() {
+  let token = getToken()
+  console.log("token",token);
+  
   return (
     <>
-     <Header />
+    {token?<Header />:null}
      <BrowserRouter>
         <Routes>
+
           <Route path="/" element={<Login/>} />
+          <Route path="/forget-password" element={<ForgetPassword/>} />
+          <Route path="/reset-password/:id/:token" element={<ResetPassword/>} />
+          <Route path="/create-account" element={<CreateAccount/>} />
           <Route path="/logout" element={<Logout/>} />
           <Route path="/dashboard" element={<Dashboard/>} />
           <Route path="/change-password" element={<Changepassword/>} />
-          <Route path="forget-password" element={<ForgetPassword/>} />
-          <Route path="/create-account" element={<CreateAccount/>} />
-          <Route path="/reset-password/:id/:token" element={<ResetPassword/>} />
           <Route path="/candidate-table" element={<CandidateTable/>} />
           <Route path="/candidateall-table/:id" element={<CandidateAll/>} />
           <Route path="/question-table" element={<QuestionTable/>} />

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import InputField from "./Input";
+import InputField from "../shared/Input";
 import axios from "axios";
 import { getToken, storeToken } from "../Services/LocalStorageService";
 const Login = () => {
@@ -28,7 +28,7 @@ const Login = () => {
             console.log(res.data.token);
             // setSuccess("Login successfully")
             alert("Login successfully");
-            navigate('/candidatetable')
+            navigate('/candidate-table')
           }
           else{
             alert("Login failed")
@@ -70,7 +70,9 @@ const Login = () => {
                 className="block w-full px-4 py-2 mt-2 text-neutral-700 bg-white border rounded-md focus:border-neutral-400 focus:ring-neutral-300 focus:outline-none focus:ring focus:ring-opacity-40"
               />
             </div> */}
-            <div className="mb-2">
+            <InputField labelText={"Password"} inputType={"password"} inputName={"password"} inputValue={password} inputPlaceHolder={"password"}
+             onChange={setPassword} id={"Password"} />
+            {/* <div className="mb-2">
               <label
                 htmlFor="password"
                 className="block text-sm font-semibold text-gray-800"
@@ -85,7 +87,7 @@ const Login = () => {
                 }}
                 className="block w-full px-4 py-2 mt-2 text-neutral-700 bg-white border rounded-md focus:border-neutral-400 focus:ring-neutral-300 focus:outline-none focus:ring focus:ring-opacity-40"
               />
-            </div>
+            </div> */}
 
             <div className="mt-6">
               <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-neutral-700 rounded-md hover:bg-neutral-600 focus:outline-none focus:bg-neutral-600">
@@ -98,7 +100,7 @@ const Login = () => {
           <div className="flex items-center justify-between mt-5">
             <div className="text-sm">
               <a
-                href="http://localhost:3000/create-account"
+                href="/create-account"
                 className="font-medium text-neutral-600 hover:underline"
               >
                 Create an Account?
@@ -106,7 +108,7 @@ const Login = () => {
             </div>
             <div className="text-sm">
               <a
-                href="http://localhost:3000/forget-password"
+                href="/forget-password"
                 className="font-medium text-neutral-600 hover:underline"
               >
                 Forgot Password?
