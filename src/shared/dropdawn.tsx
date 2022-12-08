@@ -4,7 +4,7 @@ interface Idropdawn {
   className?: String;
   labelText?: String;
   labelClassName?: String;
-  inputType: String;
+  inputType?: String;
   inputName?: String;
   inputValue?: String;
   inputPlaceHolder?: String;
@@ -16,7 +16,8 @@ interface Idropdawn {
   id: String;
   name: String;
   dropdownArr: any[];
-  Select:String
+  Select: String;
+  selectedValue?: String;
 }
 
 const Dropdawn: FC<Idropdawn> = ({
@@ -32,10 +33,11 @@ const Dropdawn: FC<Idropdawn> = ({
   inputClassName,
   minLength,
   maxLength,
+  selectedValue,
   id,
   name,
   dropdownArr,
-  Select
+  Select,
 }) => {
   return (
     <>
@@ -56,6 +58,7 @@ const Dropdawn: FC<Idropdawn> = ({
               name={`${name}`}
               id={`${name}`}
               className={cn("form-control", `${className}`)}
+              value={`${selectedValue}`}
               required
             >
               <option value=""> {`${Select}`}</option>

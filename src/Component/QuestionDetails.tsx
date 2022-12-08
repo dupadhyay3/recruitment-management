@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 // import  from "./  assets/images/ring-36.svg";
 import Spinner from "./../assets/images/ring-36.svg";
 import InputField from "../shared/Input";
+import Dropdawn from "../shared/dropdawn";
 
 interface IQuestiondata {
   question?: string;
@@ -17,6 +18,11 @@ interface IQuestiondata {
 const QuestionDetail = () => {
   const [isLoad, setIsLoad] = useState(false);
   const { id } = useParams();
+  const optionTypes = [
+    { name: "Single" },
+    { name: "Query" },
+    { name: "Multiple" },
+  ];
   // const questionContextValue = useContext(QuestionContext);
 
   const [data, setData] = useState<IQuestiondata>({});
@@ -44,45 +50,25 @@ const QuestionDetail = () => {
     setQueryAns(data.ans?.length ? data.ans[0] : "");
   }, [data]);
 
-  // const handleOnChangeCheckbox = (selectedIndex : number, e : any) => {
-  //   let options = data.options;
-  //   if(options)
-  //   options[selectedIndex].value = e.target.checked;
+  const handleOnChangeCheckbox = (selectedIndex: number, e: any) => {
+    if (data.ans?.includes(e.target.name)) {
+      let index = data.ans.findIndex((data) => data === e.target.name);
+      data.ans.splice(index, 1);
+    } else {
+      data.ans?.push(e.target.name);
+    }
+    setData((pre) => ({ ans: data.ans, ...pre }));
+  };
 
-  //   let question = {
-  //     ...data,
-  //     options: options,
-  //   };
-  //   props.updateQuestion(question);
-  // };
+  const handleOnChangeRadio = (selectedIndex: number, e: any) => {
+    data.ans = [e.target.name];
+    setData((pre) => ({ ans: data.ans, ...pre }));
+  };
 
-  // const handleOnChangeRadio = (selectedIndex, e) => {
-  //   let options = props.question.options;
-  //   options.map(
-  //     (data) => (data.value = data.title === e.target.value ? true : false)
-  //   );
-
-  //   let question = {
-  //     ...props.question,
-  //     options: options,
-  //   };
-  //   props.updateQuestion(question);
-  // };
-
-  // const handleOnChangeQuery = (index, e, id) => {
-  //   console.log(e);
-  //   let options = props.question.options;
-  //   options.map((data) => {
-  //     data.query = e.target.value;
-  //     return (data.value = data.query ? true : false);
-  //   });
-
-  //   let question = {
-  //     ...props.question,
-  //     options: options,
-  //   };
-  //   props.updateQuestion(question);
-  // };
+  const handleOnChangeQuery = (index: number, e: any) => {
+    data.ans = [e.target.name];
+    setData((pre) => ({ ans: data.ans, ...pre }));
+  };
 
   return (
     <>
@@ -107,16 +93,16 @@ const QuestionDetail = () => {
                       id={`custom-checkbox-${index}-${data?._id}`}
                       name={option?.title}
                       checked={data.ans?.includes(option?.title)}
-                      // onChange={(e) => handleOnChangeCheckbox(index, e)}
+                      onChange={(e) => handleOnChangeCheckbox(index, e)}
                     />
                   ) : data?.optionType === "Query" ? (
                     <div>
-                       <label htmlFor="query">SQL Query Answer</label>
+                      <label htmlFor="query">SQL Query Answer</label>
                       <textarea
                         id={`custom-checkbox-${index}-${data?._id}`}
                         name={option?._id}
-                        defaultValue={option?.query}
-                        // onChange={(e) => handleOnChangeQuery(index, e, option._id)}
+                        defaultValue={data.ans}
+                        onChange={(e) => handleOnChangeQuery(index, e)}
                       ></textarea>
                     </div>
                   ) : (
@@ -126,7 +112,7 @@ const QuestionDetail = () => {
                       id={`custom-checkbox-${index}-${data?._id}`}
                       name={option?.title}
                       checked={data.ans?.includes(option?.title)}
-                      // onChange={(e) => handleOnChangeRadio(index, e)}
+                      onChange={(e) => handleOnChangeRadio(index, e)}
                     />
                   )}
 
@@ -138,30 +124,15 @@ const QuestionDetail = () => {
             })}
           </ul>
 
-          <div>
-            {data?.optionType === "Query" ? (
-              <div>
-                <label htmlFor="query">SQL Query Answer</label>
-                <textarea
-                  id="query"
-                  placeholder="Type Query"
-                  className="form-control"
-                  value={queryAns}
-                  onChange={(e) => setQueryAns(e.target.value)}
-                  required
-                ></textarea>
-              </div>
-            ) : (
-              <InputField
-                id={"answer"}
-                labelText={"Answer"}
-                inputType={"text"}
-                inputValue={question}
-                inputPlaceHolder={"Question"}
-                onChange={setQuestion}
-              />
-            )}
-          </div>
+          <Dropdawn
+            id={"optionType"}
+            name={"optionType"}
+            dropdownArr={optionTypes}
+            Select={"Select Option Type"}
+            labelText={'OptionType'}
+            selectedValue={data.optionType}
+          />
+
           {/* <div className="form-group">
               <label htmlFor="collegeName">College Name</label>
               <div className="form-group-inner">
