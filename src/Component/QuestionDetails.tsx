@@ -18,6 +18,7 @@ interface IQuestiondata {
 const QuestionDetail = () => {
   const [isLoad, setIsLoad] = useState(false);
   const { id } = useParams();
+
   const optionTypes = [
     { name: "Single" },
     { name: "Query" },
@@ -28,6 +29,8 @@ const QuestionDetail = () => {
   const [data, setData] = useState<IQuestiondata>({});
   const [question, setQuestion] = useState<string>("");
   const [queryAns, setQueryAns] = useState<string>("");
+  const [isView, setIsView] = useState<boolean>(true);
+  const [isEdit, setIsEdit] = useState<string>("");
 
   const fetchQuestion = useCallback(() => {
     axios
@@ -39,6 +42,11 @@ const QuestionDetail = () => {
       .catch((err) => {
         console.log(err);
       });
+
+    // questionContextValue.questionDispatch({
+    //   type: "GET_QUESTION",
+    //   payload: id,
+    // });
   }, []);
 
   useEffect(() => {
@@ -78,6 +86,11 @@ const QuestionDetail = () => {
 
   return (
     <>
+      <button onClick={() => setIsEdit("question")}>Edit Question</button>
+      {data.optionType !== "Query" ? (
+        <button onClick={() => setIsEdit("option")}>Edit Options</button>
+      ) : null}
+
       <form className="from">
         <div className="from-group">
           <InputField
@@ -87,48 +100,8 @@ const QuestionDetail = () => {
             inputValue={question}
             inputPlaceHolder={"Question"}
             onChange={setQuestion}
+            isDisabled={isEdit === "question" ? false : true}
           />
-
-          <ul className="question-list">
-            {data?.options?.map((option, index) => {
-              return (
-                <li key={`${index}-${data?._id}`}>
-                  {data?.optionType === "Multiple" ? (
-                    <input
-                      type="checkbox"
-                      id={`custom-checkbox-${index}-${data?._id}`}
-                      name={option?.title}
-                      checked={data.ans?.includes(option?.title)}
-                      onChange={(e) => handleOnChangeCheckbox(index, e)}
-                    />
-                  ) : data?.optionType === "Query" ? (
-                    <div>
-                      <label htmlFor="query">SQL Query Answer</label>
-                      <textarea
-                        id={`custom-checkbox-${index}-${data?._id}`}
-                        name={option?._id}
-                        defaultValue={data.ans}
-                        onChange={(e) => handleOnChangeQuery(index, e)}
-                      ></textarea>
-                    </div>
-                  ) : (
-                    <input
-                      type="radio"
-                      value={option?.title}
-                      id={`custom-checkbox-${index}-${data?._id}`}
-                      name={option?.title}
-                      checked={data.ans?.includes(option?.title)}
-                      onChange={(e) => handleOnChangeRadio(index, e)}
-                    />
-                  )}
-
-                  <label htmlFor={`custom-checkbox-${index}-${data?._id}`}>
-                    {option?.title}
-                  </label>
-                </li>
-              );
-            })}
-          </ul>
 
           <Dropdawn
             id={"optionType"}
@@ -138,7 +111,99 @@ const QuestionDetail = () => {
             labelText={"OptionType"}
             selectedValue={data.optionType}
             onChange={(e: any) => handleOnChangeOptionType(e)}
+            isDisabled={isEdit === "question" ? false : true}
           />
+
+          {!isEdit ? (
+            <ul className="question-list">
+              {data?.options?.map((option, index) => {
+                return (
+                  <li key={`${index}-${data?._id}`}>
+                    {data?.optionType === "Multiple" ? (
+                      <input
+                        type="checkbox"
+                        id={`custom-checkbox-${index}-${data?._id}`}
+                        name={option?.title}
+                        checked={data.ans?.includes(option?.title)}
+                        onChange={(e) => handleOnChangeCheckbox(index, e)}
+                        disabled={isEdit === "option" ? false : true}
+                      />
+                    ) : data?.optionType === "Query" ? (
+                      <div>
+                        <label htmlFor="query">SQL Query Answer</label>
+                        <textarea
+                          id={`custom-checkbox-${index}-${data?._id}`}
+                          name={option?._id}
+                          defaultValue={data.ans}
+                          onChange={(e) => handleOnChangeQuery(index, e)}
+                        ></textarea>
+                      </div>
+                    ) :  (
+                      <input
+                        type="radio"
+                        value={option?.title}
+                        id={`custom-checkbox-${index}-${data?._id}`}
+                        name={option?.title}
+                        checked={data.ans?.includes(option?.title)}
+                        onChange={(e) => handleOnChangeRadio(index, e)}
+                        disabled={isEdit === "option" ? false : true}
+                      />
+                    )}
+
+                    <label htmlFor={`custom-checkbox-${index}-${data?._id}`}>
+                      {option?.title}
+                    </label>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <ul className="question-list">
+              {data?.options?.length === 4 &&
+                data?.options?.map((option, index) => {
+                  return (
+                    <li key={`${index}-${data?._id}`}>
+                      <input
+                        type="text"
+                        value={option?.title}
+                        id={`custom-checkbox-${index}-${data?._id}`}
+                        name={option?.title}
+                        // onChange={(e) => handleOnChangeCheckbox(index, e)}
+                      />
+                    </li>
+                  );
+                })}
+
+              {data?.options?.length !== 4 && (
+                <div>
+                  <input
+                    type="text"
+                    value={data?.ans}
+                    id="option1"
+                    // onChange={(e) => handleOnChangeRadio(index, e)}
+                  />
+                  <input
+                    type="text"
+                    value={data?.ans}
+                    id="option2"
+                    // onChange={(e) => handleOnChangeRadio(index, e)}
+                  />
+                  <input
+                    type="text"
+                    value={data?.ans}
+                    id="option3"
+                    // onChange={(e) => handleOnChangeRadio(index, e)}
+                  />
+                  <input
+                    type="text"
+                    value={data?.ans}
+                    id="option3"
+                    // onChange={(e) => handleOnChangeRadio(index, e)}
+                  />
+                </div>
+              )}
+            </ul>
+          )}
 
           {/* <div className="form-group">
               <label htmlFor="collegeName">College Name</label>
@@ -161,22 +226,24 @@ const QuestionDetail = () => {
                 </div>
               </div>
             </div>       */}
-          <div className="form-group">
-            <button
-              type="submit"
-              className="cmn-btn submit-btn"
-              disabled={isLoad}
-            >
-              {!isLoad ? (
-                <span>Submit</span>
-              ) : (
-                <span>
-                  <img src={Spinner} alt="Spinner" />
-                  Loading...
-                </span>
-              )}
-            </button>
-          </div>
+          {isEdit ? (
+            <div className="form-group">
+              <button
+                type="submit"
+                className="cmn-btn submit-btn"
+                disabled={isLoad}
+              >
+                {!isLoad ? (
+                  <span>Submit</span>
+                ) : (
+                  <span>
+                    <img src={Spinner} alt="Spinner" />
+                    Loading...
+                  </span>
+                )}
+              </button>
+            </div>
+          ) : null}
         </div>
       </form>
     </>
