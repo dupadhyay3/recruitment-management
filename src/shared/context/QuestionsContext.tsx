@@ -39,7 +39,7 @@ function questionReducer(state: any, action: IAction) {
           resData = res?.data;
           console.log("res", resData);
         });
-      return {...resData};
+      return {...state, ...resData};
     default:
       return state;
   }

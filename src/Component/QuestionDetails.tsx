@@ -59,6 +59,17 @@ const QuestionDetail = () => {
   }, [data]);
 
   const handleOnChangeCheckbox = (selectedIndex: number, e: any) => {
+    if (
+      data.ans &&
+      !data.ans.every((el) => data.options?.some((data) => el === data.title))
+    ) {
+      data.ans.every((el, index) => {
+        if (!data.options?.some((data) => el === data.title)) {
+          data.ans?.splice(index, 1);
+        }
+      });
+    }
+
     if (data.ans?.includes(e.target.name)) {
       let index = data.ans.findIndex((data) => data === e.target.name);
       data.ans.splice(index, 1);
@@ -70,12 +81,23 @@ const QuestionDetail = () => {
 
   const handleOnChangeRadio = (selectedIndex: number, e: any) => {
     data.ans = [e.target.name];
+    console.log(data.ans);
+
     setData((pre) => ({ ans: data.ans, ...pre }));
+    // console.log("data", data);
   };
 
   const handleOnChangeQuery = (index: number, e: any) => {
-    data.ans = [e.target.name];
+    data.ans = [e.target.value];
+    console.log("data.ans", data.ans);
+
     setData((pre) => ({ ans: data.ans, ...pre }));
+  };
+
+  const handleOnchangeQuestion = (value: string) => {
+    console.log(value);
+    data.question = value;
+    setData((pre) => ({ question: data.question, ...pre }));
   };
 
   const handleOnChangeOptionType = (e: any) => {
@@ -84,22 +106,64 @@ const QuestionDetail = () => {
     setData((pre) => ({ optionType: data.optionType, ...pre }));
   };
 
+  const handleOnChangeExistingOptions = (index: number, e: any) => {
+    if (data.options) data.options[index].title = e.target.value;
+    setData((pre) => ({ options: data.options, ...pre }));
+    console.log(data.options);
+  };
+
+  const handleOnChangeoptions = (index: number, e: any) => {
+    if (data?.options?.length !== 4) {
+      for (let i = 0; i <= 3; i++) {
+        if (data.options) {
+          if (index !== i) data.options[i] = { value: false, title: "" };
+          else data.options[index] = { value: false, title: e.target.value };
+        }
+      }
+
+      console.log(data.options);
+
+      setData((pre) => ({ options: data.options, ...pre }));
+    } else handleOnChangeExistingOptions(index, e);
+  };
+
+  const onSubmit = (e: any) => {
+    e.preventDefault();
+    if (data.optionType === "Query") {
+      data.options = [{ value: false, query: "" }];
+      setData((pre) => ({ options: data.options, ...pre }));
+    }
+
+    console.log(data.options, data.ans);
+    if (data.ans) {
+      if (
+        data.optionType === "Query" ||
+        data.ans.every((el) => data.options?.some((data) => el === data.title))
+      ) {
+        console.log("data", data);
+      } else {
+        alert("Check answer!");
+      }
+    }
+  };
+
   return (
     <>
       <button onClick={() => setIsEdit("question")}>Edit Question</button>
       {data.optionType !== "Query" ? (
         <button onClick={() => setIsEdit("option")}>Edit Options</button>
       ) : null}
+      <button onClick={() => setIsEdit("answer")}>Edit Answer</button>
 
-      <form className="from">
+      <form className="from" onSubmit={(e) => onSubmit(e)}>
         <div className="from-group">
           <InputField
             id={"question"}
             labelText={"Question"}
             inputType={"text"}
-            inputValue={question}
+            inputValue={data.question}
             inputPlaceHolder={"Question"}
-            onChange={setQuestion}
+            onChange={handleOnchangeQuestion}
             isDisabled={isEdit === "question" ? false : true}
           />
 
@@ -114,7 +178,7 @@ const QuestionDetail = () => {
             isDisabled={isEdit === "question" ? false : true}
           />
 
-          {!isEdit ? (
+          {!isEdit || isEdit === "answer" ? (
             <ul className="question-list">
               {data?.options?.map((option, index) => {
                 return (
@@ -126,19 +190,28 @@ const QuestionDetail = () => {
                         name={option?.title}
                         checked={data.ans?.includes(option?.title)}
                         onChange={(e) => handleOnChangeCheckbox(index, e)}
-                        disabled={isEdit === "option" ? false : true}
+                        disabled={
+                          isEdit === "option" || isEdit === "answer"
+                            ? false
+                            : true
+                        }
                       />
-                    ) : data?.optionType === "Query" ? (
+                    ) : data?.optionType === "Query" && !index ? (
                       <div>
                         <label htmlFor="query">SQL Query Answer</label>
                         <textarea
                           id={`custom-checkbox-${index}-${data?._id}`}
                           name={option?._id}
-                          defaultValue={data.ans}
+                          defaultValue={data.ans?.length ? data.ans[0] : ""}
                           onChange={(e) => handleOnChangeQuery(index, e)}
+                          disabled={
+                            isEdit === "option" || isEdit === "answer"
+                              ? false
+                              : true
+                          }
                         ></textarea>
                       </div>
-                    ) :  (
+                    ) : data.optionType === "Single" ? (
                       <input
                         type="radio"
                         value={option?.title}
@@ -146,18 +219,24 @@ const QuestionDetail = () => {
                         name={option?.title}
                         checked={data.ans?.includes(option?.title)}
                         onChange={(e) => handleOnChangeRadio(index, e)}
-                        disabled={isEdit === "option" ? false : true}
+                        disabled={
+                          isEdit === "option" || isEdit === "answer"
+                            ? false
+                            : true
+                        }
                       />
-                    )}
+                    ) : null}
 
-                    <label htmlFor={`custom-checkbox-${index}-${data?._id}`}>
-                      {option?.title}
-                    </label>
+                    {data.optionType !== "Query" ? (
+                      <label htmlFor={`custom-checkbox-${index}-${data?._id}`}>
+                        {option?.title}
+                      </label>
+                    ) : null}
                   </li>
                 );
               })}
             </ul>
-          ) : (
+          ) : isEdit === "option" ? (
             <ul className="question-list">
               {data?.options?.length === 4 &&
                 data?.options?.map((option, index) => {
@@ -168,7 +247,9 @@ const QuestionDetail = () => {
                         value={option?.title}
                         id={`custom-checkbox-${index}-${data?._id}`}
                         name={option?.title}
-                        // onChange={(e) => handleOnChangeCheckbox(index, e)}
+                        onChange={(e) =>
+                          handleOnChangeExistingOptions(index, e)
+                        }
                       />
                     </li>
                   );
@@ -178,32 +259,54 @@ const QuestionDetail = () => {
                 <div>
                   <input
                     type="text"
-                    value={data?.ans}
+                    value={
+                      data?.options?.length
+                        ? data?.options[0].title
+                          ? data?.options[0].title
+                          : data?.options[0].query
+                        : ""
+                    }
                     id="option1"
-                    // onChange={(e) => handleOnChangeRadio(index, e)}
+                    required
+                    onChange={(e) => handleOnChangeoptions(0, e)}
                   />
                   <input
                     type="text"
-                    value={data?.ans}
+                    value={
+                      data?.options?.length && data?.options[1]
+                        ? data?.options[1].title
+                        : ""
+                    }
                     id="option2"
-                    // onChange={(e) => handleOnChangeRadio(index, e)}
+                    required
+                    onChange={(e) => handleOnChangeoptions(1, e)}
                   />
                   <input
                     type="text"
-                    value={data?.ans}
+                    value={
+                      data?.options?.length && data?.options[2]
+                        ? data?.options[2].title
+                        : ""
+                    }
                     id="option3"
-                    // onChange={(e) => handleOnChangeRadio(index, e)}
+                    required
+                    onChange={(e) => handleOnChangeoptions(2, e)}
                   />
                   <input
                     type="text"
-                    value={data?.ans}
-                    id="option3"
-                    // onChange={(e) => handleOnChangeRadio(index, e)}
+                    value={
+                      data?.options?.length && data?.options[3]
+                        ? data?.options[3].title
+                        : ""
+                    }
+                    id="option4"
+                    required
+                    onChange={(e) => handleOnChangeoptions(3, e)}
                   />
                 </div>
               )}
             </ul>
-          )}
+          ) : null}
 
           {/* <div className="form-group">
               <label htmlFor="collegeName">College Name</label>
@@ -226,6 +329,7 @@ const QuestionDetail = () => {
                 </div>
               </div>
             </div>       */}
+
           {isEdit ? (
             <div className="form-group">
               <button
