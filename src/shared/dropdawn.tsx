@@ -18,6 +18,7 @@ interface Idropdawn {
   dropdownArr: any[];
   Select: String;
   selectedValue?: String;
+  isDisabled?:boolean
 }
 
 const Dropdawn: FC<Idropdawn> = ({
@@ -38,6 +39,7 @@ const Dropdawn: FC<Idropdawn> = ({
   name,
   dropdownArr,
   Select,
+  isDisabled
 }) => {
   return (
     <>
@@ -61,6 +63,7 @@ const Dropdawn: FC<Idropdawn> = ({
               value={`${selectedValue}`}
               required
               onChange={(e) => onChange(e)}
+              disabled={isDisabled}
             >
               <option value=""> {`${Select}`}</option>
               {dropdownArr.map((obj: any, index: number) => (
