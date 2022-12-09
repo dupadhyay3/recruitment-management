@@ -4,15 +4,6 @@ interface Idropdawn {
   className?: String;
   labelText?: String;
   labelClassName?: String;
-  inputType?: String;
-  inputName?: String;
-  inputValue?: String;
-  inputPlaceHolder?: String;
-  onChange?: any;
-  max?: any;
-  inputClassName?: String;
-  minLength?: any;
-  maxLength?: any;
   id: String;
   name: String;
   dropdownArr: any[];
@@ -25,15 +16,6 @@ const Dropdawn: FC<Idropdawn> = ({
   className,
   labelText,
   labelClassName,
-  inputType,
-  inputName,
-  inputValue,
-  inputPlaceHolder,
-  onChange,
-  max,
-  inputClassName,
-  minLength,
-  maxLength,
   selectedValue,
   id,
   name,

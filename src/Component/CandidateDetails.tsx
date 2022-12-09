@@ -231,7 +231,7 @@ const CandidateAll: any = () => {
                 </div>
               </div>
             </div> */}
-            <Dropdawn inputType={"option"} id={"collegeName"} name={"collegeName"} labelText={"College Name"} dropdownArr={collegeNames} Select={"Select college"} inputValue={collegeName}/>
+            <Dropdawn  id={"collegeName"} name={"collegeName"} labelText={"College Name"} dropdownArr={collegeNames} Select={"Select college"} />
             {/* <div className="form-group">
               <label htmlFor="experience">Experience</label>
               <div className="form-group-inner">
@@ -255,7 +255,7 @@ const CandidateAll: any = () => {
                 </div>
               </div>
             </div> */}
-            <Dropdawn inputType={"option"} id={"exerience"} name={"experience"} labelText={"Experience"} dropdownArr={experienceArr} Select={"Select Experience"} inputValue={experience}/>
+            <Dropdawn  id={"exerience"} name={"experience"} labelText={"Experience"} dropdownArr={experienceArr} Select={"Select Experience"} />
             <div className="form-group">
               {/* <label htmlFor="currentAddress">Current Address</label> */}
               <div className="form-group-inner">
