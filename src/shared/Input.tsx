@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import cn from "classnames";
+
 interface IInputField {
   className?:String;
   labelText?:String;
@@ -14,6 +15,7 @@ interface IInputField {
   minLength?:any;
   maxLength?:any;
   id:String;
+  isDisabled?: boolean
 }
 const InputField: FC<IInputField> = ({
   className,
@@ -29,6 +31,7 @@ const InputField: FC<IInputField> = ({
   minLength,
   maxLength,
   id,
+  isDisabled
 }) => {
   return (
     <div className={cn("mb-2", `${className}`)}>
@@ -53,6 +56,7 @@ const InputField: FC<IInputField> = ({
         }}
         minLength={minLength}
         maxLength={maxLength}
+        disabled={isDisabled}
         className={cn(
           "block w-full px-4 py-2 mt-2 text-neutral-700 bg-white border rounded-md focus:border-neutral-400 focus:ring-neutral-300 focus:outline-none focus:ring focus:ring-opacity-40",
           `${inputClassName}`
