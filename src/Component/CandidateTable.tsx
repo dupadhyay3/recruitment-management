@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Table } from "../shared/table/Table";
+
 interface ICandidatedata {
   firstName: string;
   middleName: String;
@@ -53,6 +54,7 @@ const CandidateTable = () => {
      <div>
       <Table rowsPerPage={15} rows={rows} onClickName={CandidatafullInfo} columns={columns} />
     </div> 
+   
     </>
   );
 };
