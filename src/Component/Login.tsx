@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Navigate } from "react-router-dom";
 import InputField from "../shared/Input";
 import axios from "axios";
 import { getToken, storeToken } from "../Services/LocalStorageService";
@@ -8,7 +8,7 @@ const Login = () => {
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  // const [success,setSuccess] = useState('')
+  const [tokens, settokens] = useState<any>(getToken());
   const handleSubmit = useCallback(
     (e: any) => {
       const response = {
@@ -18,17 +18,20 @@ const Login = () => {
       axios
         .post(`${process.env.REACT_APP_API}/management/admin/login`, response)
         .then((res) => {
-          console.log(res, "resssssssssssss");
-
           if (res.data.status !== "failed") {
             let token = res.data.token;
-            console.log(token, "tokennnnnnnnnnnnnnnnn");
             storeToken(token);
-
-            console.log(res.data.token);
-            // setSuccess("Login successfully")
             alert("Login successfully");
+           if (tokens) {
             navigate('/candidate-table')
+           }
+           else{
+            console.log("token not find");
+            
+           }
+            
+            
+            
           }
           else{
             alert("Login failed")
@@ -37,8 +40,6 @@ const Login = () => {
         .catch((err) => {
           console.log(err);
         });
-      console.log(email);
-
       console.log(response);
       e.preventDefault();
     },
