@@ -70,6 +70,12 @@ const QuestionDetail = () => {
     setData((pre) => ({ ans: data.ans, ...pre }));
   };
 
+  const handleOnChangeOptionType = (e: any) => {
+    console.log(e.target.value);
+    data.optionType = e.target.value;
+    setData((pre) => ({ optionType: data.optionType, ...pre }));
+  };
+
   return (
     <>
       <form className="from">
@@ -129,8 +135,9 @@ const QuestionDetail = () => {
             name={"optionType"}
             dropdownArr={optionTypes}
             Select={"Select Option Type"}
-            labelText={'OptionType'}
+            labelText={"OptionType"}
             selectedValue={data.optionType}
+            onChange={(e: any) => handleOnChangeOptionType(e)}
           />
 
           {/* <div className="form-group">

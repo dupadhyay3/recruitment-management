@@ -60,10 +60,11 @@ const Dropdawn: FC<Idropdawn> = ({
               className={cn("form-control", `${className}`)}
               value={`${selectedValue}`}
               required
+              onChange={(e) => onChange(e)}
             >
               <option value=""> {`${Select}`}</option>
               {dropdownArr.map((obj: any, index: number) => (
-                <option value={obj?.collegeName ? obj?.collegeName : obj.name}>
+                <option key={index} value={obj?.collegeName ? obj?.collegeName : obj.name}>
                   {obj?.collegeName ? obj?.collegeName : obj.name}
                 </option>
               ))}
