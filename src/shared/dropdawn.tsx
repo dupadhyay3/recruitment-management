@@ -4,7 +4,7 @@ interface Idropdawn {
   className?: String;
   labelText?: String;
   labelClassName?: String;
-  inputType: String;
+  inputType?: String;
   inputName?: String;
   inputValue?: String;
   inputPlaceHolder?: String;
@@ -16,7 +16,9 @@ interface Idropdawn {
   id: String;
   name: String;
   dropdownArr: any[];
-  Select:String
+  Select: String;
+  selectedValue?: String;
+  isDisabled?:boolean
 }
 
 const Dropdawn: FC<Idropdawn> = ({
@@ -32,10 +34,12 @@ const Dropdawn: FC<Idropdawn> = ({
   inputClassName,
   minLength,
   maxLength,
+  selectedValue,
   id,
   name,
   dropdownArr,
-  Select
+  Select,
+  isDisabled
 }) => {
   return (
     <>
@@ -56,11 +60,14 @@ const Dropdawn: FC<Idropdawn> = ({
               name={`${name}`}
               id={`${name}`}
               className={cn("form-control", `${className}`)}
+              value={`${selectedValue}`}
               required
+              onChange={(e) => onChange(e)}
+              disabled={isDisabled}
             >
               <option value=""> {`${Select}`}</option>
               {dropdownArr.map((obj: any, index: number) => (
-                <option value={obj?.collegeName ? obj?.collegeName : obj.name}>
+                <option key={index} value={obj?.collegeName ? obj?.collegeName : obj.name}>
                   {obj?.collegeName ? obj?.collegeName : obj.name}
                 </option>
               ))}
