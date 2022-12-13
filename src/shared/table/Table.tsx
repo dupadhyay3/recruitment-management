@@ -87,9 +87,7 @@ export const Table = ({
                 </th>
               );
             })}
-            <th>
-              <span>Action</span>
-            </th>
+            <th>{actions && <span>Action</span>}</th>
           </tr>
           <tr>
             {columns.map((column: any, index: any) => {
@@ -123,14 +121,15 @@ export const Table = ({
                   );
                 })}
                 <td>
-                  {actions.map((action: any, index: number) => (
-                    <span
-                      key={`${index}-result`}
-                      onClick={() => onClickAction(row?._id, action?.name)}
-                    >
-                      {action?.name}
-                    </span>
-                  ))}
+                  {actions &&
+                    actions?.map((action: any, index: number) => (
+                      <span
+                        key={`${index}-result`}
+                        onClick={() => onClickAction(row?._id, action?.name)}
+                      >
+                        {action?.name}
+                      </span>
+                    ))}
                 </td>
               </tr>
             );
