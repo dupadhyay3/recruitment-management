@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams,useNavigate } from "react-router-dom";
 import "../shared/css/common.css";
 import InputField from "../shared/Input";
 import Textarea from "../shared/textarea";
@@ -40,6 +40,7 @@ const CandidateAll: any = () => {
       name: "3-4",
     },
   ];
+ const navigate=useNavigate()
   const [data, setData] = useState<ICandidatedata>({});
   const [collegeNames, setcollegeNames] = useState<any[]>([]);
   const [isEdit, setIsEdit] = useState<string>("");
@@ -101,24 +102,42 @@ const CandidateAll: any = () => {
     setcollegeName(data.collegeName ? data.collegeName : "");
     setexperience(data.experience ? data.experience : "");
   }, [data]);
-  
+
   const handleOnChangeExperience = (e: any) => {
-    e.preventDefault();
-    console.log(e.target.value);
-    data.experience = e.target.value;
-    setData((pre)=>({ experience: data.experience, ...pre }));
+    setexperience(e.target.value);
+    // e.preventDefault();
+    // console.log(e.target.value);
+    // data.experience = e.target.value;
+    // setData((pre)=>({ experience: data.experience, ...pre }));
   };
 
   const handleOnChangeCollege = (e: any) => {
-    e.preventDefault();
-    console.log(e.target.value);
-    data.collegeName = e.target.value;
-    console.log(data.collegeName, "data.collegeName");
-    setData((pre)=>({ collegeName: data.collegeName, ...pre}));
+    setcollegeName(e.target.value);
+    // console.log(e.target.value);
+    // data.collegeName = e.target.value;
+    // console.log(data.collegeName, "data.collegeName");
+    // setData((pre)=>({ collegeName: data.collegeName, ...pre}));
   };
 
-  
-  const handleEdit = (e: any) => {
+  const handleEdit = (e: any) => {};
+  const handleDelete = () => {
+    if (window.confirm("Please confirm, to delete") === true) {
+      axios
+        .delete(
+          `${process.env.REACT_APP_API}/management/candidate/delete/${id}`
+        )
+        .then((res) => {
+          if (res.data.status) {
+            alert("candidate details Delete successfully");
+            navigate('/candidate-table')
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     const response = {
       firstName: firstName,
@@ -134,7 +153,7 @@ const CandidateAll: any = () => {
       collegeName: collegeName,
       experience: experience,
     };
-    
+
     if (window.confirm("Please confirm, to edit edit") === true) {
       axios
         .put(
@@ -144,33 +163,15 @@ const CandidateAll: any = () => {
         .then((res) => {
           if (res.data.status) {
             alert("candidate details edit successfully");
+            navigate('/candidate-table')
           }
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  };
-  const handleDelete = () => {
-    if (window.confirm("Please confirm, to delete") === true) {
-      axios
-        .delete(
-          `${process.env.REACT_APP_API}/management/candidate/delete/${id}`
-        )
-        .then((res) => {
-          if (res.data.status) {
-            alert("candidate details Delete successfully");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
-  const handleSubmit = (e:any) => {
-    e.preventDefault();
 
-    console.log('form submitted ✅');
+    console.log("form submitted ✅");
   };
   return (
     <>
@@ -179,8 +180,8 @@ const CandidateAll: any = () => {
       <button onClick={handleDelete}>Delete Candidate </button>
       <div className="registration-from-main">
         <h2> Candidate Details</h2>
-        <form className="registration-from" onSubmit={handleSubmit}>
-           {/* onSubmit={(e) => onSubmit(e)}  */}
+        <form className="registration-from" onSubmit={(e) => handleSubmit(e)}>
+          {/* onSubmit={(e) => onSubmit(e)}  */}
           <div className="rgstr-from-group">
             <div className="form-group form-group3">
               <div className="form-group-inner">
@@ -326,9 +327,8 @@ const CandidateAll: any = () => {
             isDisabled={isEdit === "question" ? false : true}
           /> */}
             <Dropdawn
-              onChange={(e:any) => handleOnChangeCollege(e) }
-              
-              selectedValue={data.collegeName}
+              onChange={(e: any) => handleOnChangeCollege(e)}
+              selectedValue={collegeName}
               id={"collegeName"}
               name={"collegeName"}
               labelText={"College Name"}
@@ -361,7 +361,7 @@ const CandidateAll: any = () => {
             </div> */}
             <Dropdawn
               onChange={handleOnChangeExperience}
-              selectedValue={data.experience}
+              selectedValue={experience}
               id={"exerience"}
               name={"experience"}
               labelText={"Experience"}
@@ -482,11 +482,7 @@ const CandidateAll: any = () => {
             </span>
           )}
         </button> */}
-              {isEdit ? (
-                <button type="submit" onClick={handleEdit}>
-                  Submit
-                </button>
-              ) : null}
+              {isEdit ? <button type="submit">Submit</button> : null}
             </div>
           </div>
         </form>
