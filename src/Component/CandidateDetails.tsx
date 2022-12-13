@@ -119,7 +119,6 @@ const CandidateAll: any = () => {
     // setData((pre)=>({ collegeName: data.collegeName, ...pre}));
   };
 
-  const handleEdit = (e: any) => {};
   const handleDelete = () => {
     if (window.confirm("Please confirm, to delete") === true) {
       axios
@@ -422,16 +421,8 @@ const CandidateAll: any = () => {
               </div>
             </div>
             <div className="form-group">
-              {/* <label htmlFor="areaOfInterest">Area of Interest</label> */}
               <div className="form-group-inner">
                 <div className="cmn-form-control">
-                  {/* <textarea
-                    id="areaOfInterest"
-                    placeholder="AreaOfInterest"
-                    className="form-control"
-                    // ref={areaOfInterestRef}
-                    required
-                  ></textarea> */}
                   <Textarea
                     labelText={"Area of Interest"}
                     inputName={"areaOfInterest"}
@@ -447,16 +438,8 @@ const CandidateAll: any = () => {
               </div>
             </div>
             <div className="form-group">
-              {/* <label htmlFor="futureGoal">Future Goal</label> */}
               <div className="form-group-inner">
                 <div className="cmn-form-control">
-                  {/* <textarea
-                    id="futureGoal"
-                    placeholder="FutureGoal"
-                    className="form-control"
-                    // ref={futureGoalRef}
-                    required
-                  ></textarea> */}
                   <Textarea
                     labelText={"Future Goal"}
                     inputName={"futureGoal"}
@@ -472,58 +455,13 @@ const CandidateAll: any = () => {
               </div>
             </div>
             <div className="form-group">
-              {/* <button type="submit" className="cmn-btn submit-btn" disabled={isLoad}>
-          {!isLoad ? (
-            <span>Submit</span>
-          ) : (
-            <span>
-              <img src={Spinner} alt="Spinner" />
-              Loading...
-            </span>
-          )}
-        </button> */}
               {isEdit ? <button type="submit">Submit</button> : null}
             </div>
           </div>
         </form>
       </div>
       ;
-      {/* <table>
-        <thead className="thead-light">
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Dob</th>
-            <th>MobileNo</th>
-            <th>CollegeName</th>
-            <th>educationDetails</th>
-            <th>areaOfIntrest</th>
-            <th>futureGoal</th>
-            <th>currentAddress</th>
-            <th>experience</th>
-            <th>batch</th>
-            <th>collegeId</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              {data.firstName} {data.middleName} {data.lastName}
-            </td>
-            <td>{data.email}</td>
-            <td>{data.dob}</td>
-            <td>{data.mobileNo}</td>
-            <td>{data.collegeName}</td>
-            <td>{data.batch}</td>
-            <td>{data.educationDetails}</td>
-            <td>{data.areaOfIntrest}</td>
-            <td>{data.futureGoal}</td>
-            <td>{data.currentAddress}</td>
-            <td>{data.experience}</td>
-            <td>{data.collegeId}</td>
-          </tr>
-        </tbody>
-      </table> */}
+      
     </>
   );
 };
