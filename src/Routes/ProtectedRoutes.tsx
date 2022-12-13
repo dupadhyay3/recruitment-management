@@ -12,7 +12,7 @@ import ResetPassword from "../Component/ResetPassword";
 import CreateAccount from "../Component/CreateAccount";
 import Logout from "../Component/Logout";
 import { useSelector, useDispatch } from 'react-redux'
-
+import CandidateResult from "../Component/CandidateResult";
 const AdminRoutes = () => {
        const usertoken = useSelector((state:any) => state.counter.value)
   const [tokens, settoken] = useState<any>(getToken());
@@ -47,6 +47,10 @@ const AdminRoutes = () => {
         <Route
           path="/question-detail/:id"
           element={token ? <QuestionDetail /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/candidate-result/:id"
+          element={token ? <CandidateResult /> : <Navigate to="/" />}
         />
       </Routes>
     </>
