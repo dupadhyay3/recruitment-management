@@ -1,16 +1,19 @@
 import logo from "./../assets/images/atharva-brand-logo-dark.png";
 import { useState } from "react";
-
+import { useSelector } from "react-redux";
+import { getToken } from "../Services/LocalStorageService";
 function Header(props: any) {
   const [navbarOpen, setNavbarOpen] = useState(false);
-
+  const usertoken = useSelector((state:any) => state.counter.value)
+  const [tokens, settoken] = useState<any>(getToken());
+  const token=usertoken||tokens
   return (
     <>
       <nav
         className={
           (props.transparent
             ? "top-0 absolute z-50 w-full"
-            : "relative shadow-lg bg-white shadow-lg") +
+            : "relative  bg-white shadow-lg") +
           " flex flex-wrap items-center justify-between px-2 py-3 "
         }
       >
@@ -38,7 +41,8 @@ function Header(props: any) {
               ></i>
             </button>
           </div>
-          <div
+
+          {token?<div
             className={
               "lg:flex flex-grow items-center bg-white lg:bg-transparent lg:shadow-none" +
               (navbarOpen ? " block rounded shadow-lg" : "")
@@ -96,7 +100,7 @@ function Header(props: any) {
                 </button>
               </li>
             </ul>
-          </div>
+          </div>:null}
         </div>
       </nav>
     </>
