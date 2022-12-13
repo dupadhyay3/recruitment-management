@@ -1,14 +1,18 @@
 import React from "react";
 import { useState, useCallback } from "react";
-import { useParams, useNavigate, Navigate } from "react-router-dom";
+import { useDispatch } from 'react-redux'
+
+import {useNavigate} from "react-router-dom";
 import InputField from "../shared/Input";
 import axios from "axios";
 import { getToken, storeToken } from "../Services/LocalStorageService";
+import { user_token } from "../redux/features/counter/CounterSlice";
 const Login = () => {
+  
+  const dispatch = useDispatch()
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [tokens, settokens] = useState<any>(getToken());
   const handleSubmit = useCallback(
     (e: any) => {
       const response = {
@@ -22,13 +26,9 @@ const Login = () => {
             let token = res.data.token;
             storeToken(token);
             alert("Login successfully");
-           if (tokens) {
+            dispatch(user_token(getToken()))
             navigate('/candidate-table')
-           }
-           else{
-            console.log("token not find");
             
-           }
             
             
             

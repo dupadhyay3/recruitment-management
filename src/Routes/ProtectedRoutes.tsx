@@ -11,15 +11,18 @@ import ForgetPassword from "../Component/ForgetPassword";
 import ResetPassword from "../Component/ResetPassword";
 import CreateAccount from "../Component/CreateAccount";
 import Logout from "../Component/Logout";
+import { useSelector, useDispatch } from 'react-redux'
 
 const AdminRoutes = () => {
-  const [token, settoken] = useState<any>(getToken());
+       const usertoken = useSelector((state:any) => state.counter.value)
+  const [tokens, settoken] = useState<any>(getToken());
+  const token=usertoken||tokens
   console.log("token", token);
 
   return (
     <>
       <Routes>
-        <Route path="/" element={<Login />} />
+      <Route path="/" element={!token?<Login />:<Navigate to="/candidate-table" />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
         <Route path="/create-account" element={<CreateAccount />} />

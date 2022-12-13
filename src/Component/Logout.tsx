@@ -7,7 +7,7 @@ const Logout = () => {
   useEffect(() => {
     removeToken("token");
     navigate("/");
-  }, []);
+  });
 
   return <></>;
 };

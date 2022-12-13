@@ -7,6 +7,7 @@ import InputField from "../shared/Input";
 import Textarea from "../shared/textarea";
 import Dropdawn from "../shared/dropdawn";
 interface ICandidatedata {
+  optionType?: string;
   firstName?: string;
   middleName?: String;
   lastName?: String;
@@ -25,20 +26,23 @@ interface ICandidatedata {
 }
 
 const CandidateAll: any = () => {
-  const [data, setData] = useState<ICandidatedata>({});
-  const [collegeNames, setcollegeNames] = useState<any[]>([]);
   const experienceArr = [
     {
-      name : '0'
+      name: "0",
     },
     {
-      name : '1-2'
-    },{
-      name : '2-3'
-    },{
-      name : '3-4'
+      name: "1-2",
     },
-  ]
+    {
+      name: "2-3",
+    },
+    {
+      name: "3-4",
+    },
+  ];
+  const [data, setData] = useState<ICandidatedata>({});
+  const [collegeNames, setcollegeNames] = useState<any[]>([]);
+  const [isEdit, setIsEdit] = useState<string>("");
   const [firstName, setfirstName] = useState<String>("");
   const [middleName, setmiddleName] = useState<String>("");
   const [lastName, setlastName] = useState<String>("");
@@ -51,15 +55,15 @@ const CandidateAll: any = () => {
   const [currentAddress, setcurrentAddress] = useState<String>("");
   const [collegeName, setcollegeName] = useState<String>("");
   const [experience, setexperience] = useState<String>("");
-  const [batch, setbatch] = useState<String>("");
-  const [collegeId, setcollegeId] = useState<String>("");
-  const [_id, set_id] = useState<String>("");
+  // const [batch, setbatch] = useState<String>("");
+  // const [collegeId, setcollegeId] = useState<String>("");
+  // const [_id, set_id] = useState<String>("");
 
   const { id } = useParams();
   console.log("data", data);
 
   //   console.log("DataCANDIDATE  ", data);
-  console.log("DOB", dob);
+  console.log("experience", experience);
 
   // console.log("newdate",newdate);
 
@@ -67,6 +71,7 @@ const CandidateAll: any = () => {
     axios
       .get(`${process.env.REACT_APP_API}/management/candidateall/get/${id}`)
       .then((res: any) => {
+        console.log("res.data", res.data);
         setData(res.data);
       })
       .catch((err) => {
@@ -77,15 +82,16 @@ const CandidateAll: any = () => {
       // console.log("/users/college/get");
       setcollegeNames(res?.data);
     });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     setfirstName(data.firstName ? data.firstName : "");
     setmiddleName(data.middleName ? data.middleName : "");
     setlastName(data.lastName ? data.lastName : "");
-    let date = data.dob ? data.dob : "";
-    let newdate = date.split("-").reverse().join("-");
-    setdob(newdate);
+    setdob(data.dob ? data.dob : "");
+    // let date = data.dob ? data.dob : "";
+    // let newdate = date.split("-").reverse().join("-");
+    // setdob(newdate);
     setemail(data.email ? data.email : "");
     setmobileNo(data.mobileNo ? data.mobileNo : "");
     setcurrentAddress(data.currentAddress ? data.currentAddress : "");
@@ -94,15 +100,87 @@ const CandidateAll: any = () => {
     setfutureGoal(data.futureGoal ? data.futureGoal : "");
     setcollegeName(data.collegeName ? data.collegeName : "");
     setexperience(data.experience ? data.experience : "");
-    
   }, [data]);
+  
+  const handleOnChangeExperience = (e: any) => {
+    e.preventDefault();
+    console.log(e.target.value);
+    data.experience = e.target.value;
+    setData((pre)=>({ experience: data.experience, ...pre }));
+  };
 
+  const handleOnChangeCollege = (e: any) => {
+    e.preventDefault();
+    console.log(e.target.value);
+    data.collegeName = e.target.value;
+    console.log(data.collegeName, "data.collegeName");
+    setData((pre)=>({ collegeName: data.collegeName, ...pre}));
+  };
+
+  
+  const handleEdit = (e: any) => {
+    e.preventDefault();
+    const response = {
+      firstName: firstName,
+      middleName: middleName,
+      lastName: lastName,
+      email: email,
+      dob: dob,
+      mobileNo: mobileNo,
+      educationDetails: educationDetails,
+      areaOfIntrest: areaOfIntrest,
+      futureGoal: futureGoal,
+      currentAddress: currentAddress,
+      collegeName: collegeName,
+      experience: experience,
+    };
+    
+    if (window.confirm("Please confirm, to edit edit") === true) {
+      axios
+        .put(
+          `${process.env.REACT_APP_API}/management/candidate/update/${id}`,
+          response
+        )
+        .then((res) => {
+          if (res.data.status) {
+            alert("candidate details edit successfully");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+  const handleDelete = () => {
+    if (window.confirm("Please confirm, to delete") === true) {
+      axios
+        .delete(
+          `${process.env.REACT_APP_API}/management/candidate/delete/${id}`
+        )
+        .then((res) => {
+          if (res.data.status) {
+            alert("candidate details Delete successfully");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+  const handleSubmit = (e:any) => {
+    e.preventDefault();
+
+    console.log('form submitted ✅');
+  };
   return (
     <>
+      <button onClick={() => setIsEdit("candidate")}>Edit Candidate</button>
+      <br />
+      <button onClick={handleDelete}>Delete Candidate </button>
       <div className="registration-from-main">
-        <h2>Candidate Details</h2>
-        <form className="registration-from">
-          {/* onSubmit={(e) => onSubmit(e)} */}
+        <h2> Candidate Details</h2>
+        <form className="registration-from" onSubmit={handleSubmit}>
+           {/* onSubmit={(e) => onSubmit(e)}  */}
           <div className="rgstr-from-group">
             <div className="form-group form-group3">
               <div className="form-group-inner">
@@ -115,6 +193,7 @@ const CandidateAll: any = () => {
                     inputPlaceHolder={"FirstName"}
                     onChange={setfirstName}
                     id={"firstName"}
+                    isDisabled={isEdit === "candidate" ? false : true}
                   />
                 </div>
                 <div className="cmn-form-control">
@@ -126,6 +205,7 @@ const CandidateAll: any = () => {
                     inputPlaceHolder={"MiddleName"}
                     onChange={setmiddleName}
                     id={"middleName"}
+                    isDisabled={isEdit === "candidate" ? false : true}
                   />
                 </div>
                 <div className="cmn-form-control">
@@ -137,6 +217,7 @@ const CandidateAll: any = () => {
                     inputPlaceHolder={"LastName"}
                     onChange={setlastName}
                     id={"lastName"}
+                    isDisabled={isEdit === "candidate" ? false : true}
                   />
                 </div>
               </div>
@@ -161,6 +242,7 @@ const CandidateAll: any = () => {
                         : "0" + new Date().getDate()
                     }`}
                     id={"dob"}
+                    isDisabled={isEdit === "candidate" ? false : true}
                   />
                 </div>
               </div>
@@ -176,6 +258,7 @@ const CandidateAll: any = () => {
                     inputPlaceHolder={"email"}
                     onChange={setemail}
                     id={"email"}
+                    isDisabled={isEdit === "candidate" ? false : true}
                   />
                 </div>
               </div>
@@ -204,6 +287,7 @@ const CandidateAll: any = () => {
                     maxLength={10}
                     onChange={setmobileNo}
                     id={"phone"}
+                    isDisabled={isEdit === "candidate" ? false : true}
                   />
                 </div>
               </div>
@@ -231,7 +315,27 @@ const CandidateAll: any = () => {
                 </div>
               </div>
             </div> */}
-            <Dropdawn  id={"collegeName"} name={"collegeName"} labelText={"College Name"} dropdownArr={collegeNames} Select={"Select college"} />
+            {/* <Dropdawn
+            id={"optionType"}
+            name={"optionType"}
+            dropdownArr={optionTypes}
+            Select={"Select Option Type"}
+            labelText={"OptionType"}
+            selectedValue={data.optionType}
+            onChange={(e: any) => handleOnChangeOptionType(e)}
+            isDisabled={isEdit === "question" ? false : true}
+          /> */}
+            <Dropdawn
+              onChange={(e:any) => handleOnChangeCollege(e) }
+              
+              selectedValue={data.collegeName}
+              id={"collegeName"}
+              name={"collegeName"}
+              labelText={"College Name"}
+              dropdownArr={collegeNames}
+              Select={"Select college"}
+              isDisabled={isEdit === "candidate" ? false : true}
+            />
             {/* <div className="form-group">
               <label htmlFor="experience">Experience</label>
               <div className="form-group-inner">
@@ -255,7 +359,16 @@ const CandidateAll: any = () => {
                 </div>
               </div>
             </div> */}
-            <Dropdawn  id={"exerience"} name={"experience"} labelText={"Experience"} dropdownArr={experienceArr} Select={"Select Experience"} />
+            <Dropdawn
+              onChange={handleOnChangeExperience}
+              selectedValue={data.experience}
+              id={"exerience"}
+              name={"experience"}
+              labelText={"Experience"}
+              dropdownArr={experienceArr}
+              Select={"Select Experience"}
+              isDisabled={isEdit === "candidate" ? false : true}
+            />
             <div className="form-group">
               {/* <label htmlFor="currentAddress">Current Address</label> */}
               <div className="form-group-inner">
@@ -267,12 +380,17 @@ const CandidateAll: any = () => {
                     // ref={currentAddressRef}
                     required
                   ></textarea> */}
-                  <Textarea labelText={"currentAddress"}
+                  <Textarea
+                    labelText={"currentAddress"}
                     inputName={"currentAddress"}
                     inputValue={currentAddress}
                     inputPlaceHolder={"currentAddress"}
                     onChange={setcurrentAddress}
-                id={"currentAddress"}  rows={"4"} class={"form-control"}    />
+                    isDisabled={isEdit === "candidate" ? false : true}
+                    id={"currentAddress"}
+                    rows={"4"}
+                    class={"form-control"}
+                  />
                 </div>
               </div>
             </div>
@@ -289,12 +407,17 @@ const CandidateAll: any = () => {
                     // ref={educationDetailsRef}
                     required
                   ></textarea> */}
-                  <Textarea labelText={"Education Details : Last Semester Grade"}
+                  <Textarea
+                    labelText={"Education Details : Last Semester Grade"}
                     inputName={"educationDetails"}
                     inputValue={educationDetails}
                     inputPlaceHolder={"EducationDetails"}
                     onChange={seteducationDetails}
-                id={"educationDetails"} rows={"4"} class={"form-control"}    />
+                    isDisabled={isEdit === "candidate" ? false : true}
+                    id={"educationDetails"}
+                    rows={"4"}
+                    class={"form-control"}
+                  />
                 </div>
               </div>
             </div>
@@ -309,12 +432,17 @@ const CandidateAll: any = () => {
                     // ref={areaOfInterestRef}
                     required
                   ></textarea> */}
-                  <Textarea labelText={"Area of Interest"}
+                  <Textarea
+                    labelText={"Area of Interest"}
                     inputName={"areaOfInterest"}
                     inputValue={areaOfIntrest}
                     inputPlaceHolder={"AreaOfInterest"}
                     onChange={setareaOfIntrest}
-                id={"areaOfInterest"}  rows={"4"} class={"form-control"}    />
+                    isDisabled={isEdit === "candidate" ? false : true}
+                    id={"areaOfInterest"}
+                    rows={"4"}
+                    class={"form-control"}
+                  />
                 </div>
               </div>
             </div>
@@ -329,12 +457,17 @@ const CandidateAll: any = () => {
                     // ref={futureGoalRef}
                     required
                   ></textarea> */}
-                  <Textarea labelText={"Future Goal"}
+                  <Textarea
+                    labelText={"Future Goal"}
                     inputName={"futureGoal"}
                     inputValue={futureGoal}
                     inputPlaceHolder={"FutureGoal"}
                     onChange={setfutureGoal}
-                id={"futureGoal"}  rows={"4"} class={"form-control"}    />
+                    isDisabled={isEdit === "candidate" ? false : true}
+                    id={"futureGoal"}
+                    rows={"4"}
+                    class={"form-control"}
+                  />
                 </div>
               </div>
             </div>
@@ -349,6 +482,11 @@ const CandidateAll: any = () => {
             </span>
           )}
         </button> */}
+              {isEdit ? (
+                <button type="submit" onClick={handleEdit}>
+                  Submit
+                </button>
+              ) : null}
             </div>
           </div>
         </form>

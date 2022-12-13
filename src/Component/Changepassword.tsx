@@ -1,47 +1,48 @@
-import React from 'react'
-import { getToken } from '../Services/LocalStorageService'
-import { useCallback, useState } from 'react'
-import {useParams, useNavigate} from 'react-router-dom'
-import axios from 'axios'
+import React from "react";
+import { getToken } from "../Services/LocalStorageService";
+import { useCallback, useState } from "react";
+
+import axios from "axios";
 const Changepassword = () => {
-    const [password, setPassword] = useState("")
-    const [password_confirmation, setConfirm_password] = useState("")
-    const navigate=useNavigate()
-    
-      const handleSubmit = useCallback(
-        (e: any) => {
-          const response = {
-            password: password,
-            password_confirmation: password_confirmation,
-          };
-          let token = getToken()
-        
-          axios
-            .post(`${process.env.REACT_APP_API}/management/admin/change`, {
-                body: response,
-                
-             },{headers: {
-                'authorization': `Bearer ${token}`,
-              }}
-             
-             )
-            .then((res) => {
-              if(res.data.status){
-                alert('reset password successfully');
-                // navigate('/management/candidate/table')
-              }
-             
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        
-    
-          console.log(response);
-          e.preventDefault();
-        },
-        [password, password_confirmation]
-      );
+  const [password, setPassword] = useState("");
+  const [password_confirmation, setConfirm_password] = useState("");
+ 
+
+  const handleSubmit = useCallback(
+    (e: any) => {
+      const response = {
+        password: password,
+        password_confirmation: password_confirmation,
+      };
+      let token = getToken();
+
+      axios
+        .post(
+          `${process.env.REACT_APP_API}/management/admin/change`,
+          {
+            body: response,
+          },
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.status) {
+            alert("reset password successfully");
+            // navigate('/management/candidate/table')
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      console.log(response);
+      e.preventDefault();
+    },
+    [password, password_confirmation]
+  );
 
   return (
     <>
@@ -90,21 +91,10 @@ const Changepassword = () => {
               </button>
             </div>
           </form>
-
-
         </div>
       </div>
-
     </>
-  )
-  
-}
+  );
+};
 
-export default Changepassword
-
-
-
-
-
-
-
+export default Changepassword;
