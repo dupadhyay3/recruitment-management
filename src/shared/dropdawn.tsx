@@ -9,7 +9,8 @@ interface Idropdawn {
   dropdownArr: any[];
   Select: String;
   selectedValue?: String;
-  isDisabled?:boolean
+  isDisabled?: boolean;
+  onChange?: any;
 }
 
 const Dropdawn: FC<Idropdawn> = ({
@@ -21,7 +22,8 @@ const Dropdawn: FC<Idropdawn> = ({
   name,
   dropdownArr,
   Select,
-  isDisabled
+  isDisabled,
+  onChange,
 }) => {
   return (
     <>
@@ -49,7 +51,10 @@ const Dropdawn: FC<Idropdawn> = ({
             >
               <option value=""> {`${Select}`}</option>
               {dropdownArr.map((obj: any, index: number) => (
-                <option key={index} value={obj?.collegeName ? obj?.collegeName : obj.name}>
+                <option
+                  key={index}
+                  value={obj?.collegeName ? obj?.collegeName : obj.name}
+                >
                   {obj?.collegeName ? obj?.collegeName : obj.name}
                 </option>
               ))}
