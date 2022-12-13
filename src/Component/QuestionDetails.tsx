@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import InputField from "../shared/Input";
 import Dropdawn from "../shared/dropdawn";
 
@@ -15,6 +15,7 @@ interface IQuestiondata {
 
 const QuestionDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const optionTypes = [
     { name: "Single" },
@@ -118,9 +119,9 @@ const QuestionDetail = () => {
               data
             )
             .then((res) => {
-              if (res.data.status) {
-                alert("Question deleted successfully");
-              }
+              console.log(res);
+              navigate("/question-table");
+              alert("Question updated successfully");
             })
             .catch((err) => {
               console.log(err);
@@ -140,6 +141,7 @@ const QuestionDetail = () => {
         .delete(`${process.env.REACT_APP_API}/management/question/delete/${id}`)
         .then((res) => {
           if (res.data.status) {
+            navigate("/question-table");
             alert("Question deleted successfully");
           }
         })
