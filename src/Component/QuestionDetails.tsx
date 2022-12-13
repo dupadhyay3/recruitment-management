@@ -1,9 +1,7 @@
-import React, { useCallback, useContext, useRef } from "react";
+import { useCallback } from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-// import  from "./  assets/images/ring-36.svg";
-import Spinner from "./../assets/images/ring-36.svg";
+import { useNavigate, useParams } from "react-router-dom";
 import InputField from "../shared/Input";
 import Dropdawn from "../shared/dropdawn";
 
@@ -16,47 +14,32 @@ interface IQuestiondata {
 }
 
 const QuestionDetail = () => {
-  const [isLoad, setIsLoad] = useState(false);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const optionTypes = [
     { name: "Single" },
     { name: "Query" },
     { name: "Multiple" },
   ];
-  // const questionContextValue = useContext(QuestionContext);
 
   const [data, setData] = useState<IQuestiondata>({});
-  const [question, setQuestion] = useState<string>("");
-  const [queryAns, setQueryAns] = useState<string>("");
-  const [isView, setIsView] = useState<boolean>(true);
   const [isEdit, setIsEdit] = useState<string>("");
 
   const fetchQuestion = useCallback(() => {
     axios
       .get(`${process.env.REACT_APP_API}/management/question/get/${id}`)
       .then((res: any) => {
-        console.log("res", res);
         setData(res?.data);
       })
       .catch((err) => {
         console.log(err);
       });
-
-    // questionContextValue.questionDispatch({
-    //   type: "GET_QUESTION",
-    //   payload: id,
-    // });
   }, []);
 
   useEffect(() => {
     fetchQuestion();
   }, [fetchQuestion]);
-
-  useEffect(() => {
-    setQuestion(data.question ? data.question : "");
-    setQueryAns(data.ans?.length ? data.ans[0] : "");
-  }, [data]);
 
   const handleOnChangeCheckbox = (selectedIndex: number, e: any) => {
     if (
@@ -81,27 +64,20 @@ const QuestionDetail = () => {
 
   const handleOnChangeRadio = (selectedIndex: number, e: any) => {
     data.ans = [e.target.name];
-    console.log(data.ans);
-
     setData((pre) => ({ ans: data.ans, ...pre }));
-    // console.log("data", data);
   };
 
   const handleOnChangeQuery = (index: number, e: any) => {
     data.ans = [e.target.value];
-    console.log("data.ans", data.ans);
-
     setData((pre) => ({ ans: data.ans, ...pre }));
   };
 
   const handleOnchangeQuestion = (value: string) => {
-    console.log(value);
     data.question = value;
     setData((pre) => ({ question: data.question, ...pre }));
   };
 
   const handleOnChangeOptionType = (e: any) => {
-    console.log(e.target.value);
     data.optionType = e.target.value;
     setData((pre) => ({ optionType: data.optionType, ...pre }));
   };
@@ -109,7 +85,6 @@ const QuestionDetail = () => {
   const handleOnChangeExistingOptions = (index: number, e: any) => {
     if (data.options) data.options[index].title = e.target.value;
     setData((pre) => ({ options: data.options, ...pre }));
-    console.log(data.options);
   };
 
   const handleOnChangeoptions = (index: number, e: any) => {
@@ -120,9 +95,6 @@ const QuestionDetail = () => {
           else data.options[index] = { value: false, title: e.target.value };
         }
       }
-
-      console.log(data.options);
-
       setData((pre) => ({ options: data.options, ...pre }));
     } else handleOnChangeExistingOptions(index, e);
   };
@@ -133,17 +105,49 @@ const QuestionDetail = () => {
       data.options = [{ value: false, query: "" }];
       setData((pre) => ({ options: data.options, ...pre }));
     }
-
-    console.log(data.options, data.ans);
     if (data.ans) {
       if (
         data.optionType === "Query" ||
         data.ans.every((el) => data.options?.some((data) => el === data.title))
       ) {
-        console.log("data", data);
+        if (
+          window.confirm("Are you want to sure to edit the question?") === true
+        ) {
+          axios
+            .put(
+              `${process.env.REACT_APP_API}/management/question/update/${id}`,
+              data
+            )
+            .then((res) => {
+              console.log(res);
+              navigate("/question-table");
+              alert("Question updated successfully");
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
       } else {
         alert("Check answer!");
       }
+    }
+  };
+
+  const handleDelete = () => {
+    if (
+      window.confirm("Are you want to sure to delete the question?") === true
+    ) {
+      axios
+        .delete(`${process.env.REACT_APP_API}/management/question/delete/${id}`)
+        .then((res) => {
+          if (res.data.status) {
+            navigate("/question-table");
+            alert("Question deleted successfully");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
@@ -154,6 +158,7 @@ const QuestionDetail = () => {
         <button onClick={() => setIsEdit("option")}>Edit Options</button>
       ) : null}
       <button onClick={() => setIsEdit("answer")}>Edit Answer</button>
+      <button onClick={() => handleDelete()}>Delete Question</button>
 
       <form className="from" onSubmit={(e) => onSubmit(e)}>
         <div className="from-group">
@@ -308,43 +313,10 @@ const QuestionDetail = () => {
             </ul>
           ) : null}
 
-          {/* <div className="form-group">
-              <label htmlFor="collegeName">College Name</label>
-              <div className="form-group-inner">
-                <div className="cmn-form-control">
-                  <select
-                    name="collegeName"
-                    id="collegeName"
-                    className="form-control"
-                    ref={collegeNameRef}
-                    required
-                  >
-                    <option value="">Select College Name</option>
-                    {collegeNames.map((obj, index) => (
-                      <option key={index} value={obj.collegeName}>
-                        {obj.collegeName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>       */}
-
           {isEdit ? (
             <div className="form-group">
-              <button
-                type="submit"
-                className="cmn-btn submit-btn"
-                disabled={isLoad}
-              >
-                {!isLoad ? (
-                  <span>Submit</span>
-                ) : (
-                  <span>
-                    <img src={Spinner} alt="Spinner" />
-                    Loading...
-                  </span>
-                )}
+              <button type="submit" className="cmn-btn submit-btn">
+                Submit
               </button>
             </div>
           ) : null}
