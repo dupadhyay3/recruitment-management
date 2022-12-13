@@ -19,26 +19,25 @@ interface ICandidatedata {
   experience: String;
   batch: String;
   collegeId: String;
-  _id?: String
+  _id?: String;
 }
 
 const CandidateTable = () => {
   const navigate = useNavigate();
-  
-  const  CandidatafullInfo = (id?:String) => {
-    navigate(`/candidateall-table/${id}`)
-    };
 
   const columns = [
-    { accessor: 'firstName', label: 'Name' },
-    { accessor: 'email', label: 'Email' },
-    { accessor: 'dob', label: 'Dob' },
-    { accessor: 'mobileNo', label: 'MobileNo' },
-    { accessor: 'collegeName', label: 'CollegeName' },
-    { accessor: 'batch', label: 'Batch' },
-  ]
+    { accessor: "firstName", label: "Name" },
+    { accessor: "email", label: "Email" },
+    { accessor: "dob", label: "Dob" },
+    { accessor: "mobileNo", label: "MobileNo" },
+    { accessor: "collegeName", label: "CollegeName" },
+    { accessor: "batch", label: "Batch" },
+  ];
+
+  const actions = [{ name: "Result" }];
 
   const [rows, setRows] = useState<ICandidatedata[]>([]);
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API}/management/candidate/get`)
@@ -49,15 +48,29 @@ const CandidateTable = () => {
         console.log(err);
       });
   }, []);
+
+  const CandidatafullInfo = (id?: String) => {
+    navigate(`/candidateall-table/${id}`);
+  };
+
+  const handleClickAction = (id?: string, actionName?: string) => {
+    navigate(`/candidate-result/${id}`);
+  };
+
   return (
     <>
-     <div>
-      <Table rowsPerPage={15} rows={rows} onClickName={CandidatafullInfo} columns={columns} />
-    </div> 
-   
+      <div>
+        <Table
+          rowsPerPage={15}
+          rows={rows}
+          onClickName={CandidatafullInfo}
+          actions={actions}
+          onClickAction={handleClickAction}
+          columns={columns}
+        />
+      </div>
     </>
   );
 };
 
 export default CandidateTable;
-
