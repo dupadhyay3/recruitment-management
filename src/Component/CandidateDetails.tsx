@@ -1,11 +1,13 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Navigate, useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "../shared/css/common.css";
 import InputField from "../shared/Input";
 import Textarea from "../shared/textarea";
 import Dropdawn from "../shared/dropdawn";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 interface ICandidatedata {
   optionType?: string;
   firstName?: string;
@@ -26,6 +28,16 @@ interface ICandidatedata {
 }
 
 const CandidateAll: any = () => {
+  const showToastMessageEdit = () => {
+    toast.success("Edit Success!", {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  };
+  const showToastMessageDelete = () => {
+    toast.success("Delete Success!", {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  };
   const experienceArr = [
     {
       name: "0",
@@ -40,7 +52,7 @@ const CandidateAll: any = () => {
       name: "3-4",
     },
   ];
- const navigate=useNavigate()
+  const navigate = useNavigate();
   const [data, setData] = useState<ICandidatedata>({});
   const [collegeNames, setcollegeNames] = useState<any[]>([]);
   const [isEdit, setIsEdit] = useState<string>("");
@@ -56,31 +68,18 @@ const CandidateAll: any = () => {
   const [currentAddress, setcurrentAddress] = useState<String>("");
   const [collegeName, setcollegeName] = useState<String>("");
   const [experience, setexperience] = useState<String>("");
-  // const [batch, setbatch] = useState<String>("");
-  // const [collegeId, setcollegeId] = useState<String>("");
-  // const [_id, set_id] = useState<String>("");
 
   const { id } = useParams();
-  console.log("data", data);
-
-  //   console.log("DataCANDIDATE  ", data);
-  console.log("experience", experience);
-
-  // console.log("newdate",newdate);
 
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API}/management/candidateall/get/${id}`)
       .then((res: any) => {
-        console.log("res.data", res.data);
         setData(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
 
     axios.get(`${process.env.REACT_APP_API}/users/college/get`).then((res) => {
-      // console.log("/users/college/get");
       setcollegeNames(res?.data);
     });
   }, [id]);
@@ -90,9 +89,7 @@ const CandidateAll: any = () => {
     setmiddleName(data.middleName ? data.middleName : "");
     setlastName(data.lastName ? data.lastName : "");
     setdob(data.dob ? data.dob : "");
-    // let date = data.dob ? data.dob : "";
-    // let newdate = date.split("-").reverse().join("-");
-    // setdob(newdate);
+
     setemail(data.email ? data.email : "");
     setmobileNo(data.mobileNo ? data.mobileNo : "");
     setcurrentAddress(data.currentAddress ? data.currentAddress : "");
@@ -105,18 +102,10 @@ const CandidateAll: any = () => {
 
   const handleOnChangeExperience = (e: any) => {
     setexperience(e.target.value);
-    // e.preventDefault();
-    // console.log(e.target.value);
-    // data.experience = e.target.value;
-    // setData((pre)=>({ experience: data.experience, ...pre }));
   };
 
   const handleOnChangeCollege = (e: any) => {
     setcollegeName(e.target.value);
-    // console.log(e.target.value);
-    // data.collegeName = e.target.value;
-    // console.log(data.collegeName, "data.collegeName");
-    // setData((pre)=>({ collegeName: data.collegeName, ...pre}));
   };
 
   const handleDelete = () => {
@@ -127,13 +116,13 @@ const CandidateAll: any = () => {
         )
         .then((res) => {
           if (res.data.status) {
-            alert("candidate details Delete successfully");
-            navigate('/candidate-table')
+            showToastMessageDelete();
+            setTimeout(() => {
+              navigate("/candidate-table");
+            }, 3000);
           }
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     }
   };
   const handleSubmit = (e: any) => {
@@ -161,26 +150,26 @@ const CandidateAll: any = () => {
         )
         .then((res) => {
           if (res.data.status) {
-            alert("candidate details edit successfully");
-            navigate('/candidate-table')
+            showToastMessageEdit();
+            setTimeout(() => {
+              navigate("/candidate-table");
+            }, 3000);
           }
         })
         .catch((err) => {
           console.log(err);
         });
     }
-
-    console.log("form submitted ✅");
   };
   return (
     <>
+      <ToastContainer />
       <button onClick={() => setIsEdit("candidate")}>Edit Candidate</button>
       <br />
       <button onClick={handleDelete}>Delete Candidate </button>
       <div className="registration-from-main">
         <h2> Candidate Details</h2>
         <form className="registration-from" onSubmit={(e) => handleSubmit(e)}>
-          {/* onSubmit={(e) => onSubmit(e)}  */}
           <div className="rgstr-from-group">
             <div className="form-group form-group3">
               <div className="form-group-inner">
@@ -264,19 +253,8 @@ const CandidateAll: any = () => {
               </div>
             </div>
             <div className="form-group">
-              {/* <label htmlFor="phone">Mobile No.</label> */}
               <div className="form-group-inner">
                 <div className="cmn-form-control">
-                  {/* <input
-                    id="phone"
-                    placeholder="Mobile No"
-                    type="text"
-                    className="form-control"
-                    // onChange={(e) => handleOnChangePhone(e)}
-                    // ref={phoneRef}
-                    
-                    required
-                  /> */}
                   <InputField
                     labelText={"Mobile NO."}
                     inputType={"text"}
@@ -292,39 +270,6 @@ const CandidateAll: any = () => {
                 </div>
               </div>
             </div>{" "}
-            {/* <div className="form-group">
-              <label htmlFor="collegeName">
-                College Name {collegeNameRef.current?.value}
-              </label>
-              <div className="form-group-inner">
-                <div className="cmn-form-control">
-                  <select
-                    name="collegeName"
-                    id="collegeName"
-                    className="form-control"
-                    ref={collegeNameRef}
-                    required
-                  >
-                    <option value="">Select College Name </option>
-                    {collegeNames.map((obj, index) => (
-                      <option key={index} value={obj.collegeName}>
-                        {obj.collegeName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div> */}
-            {/* <Dropdawn
-            id={"optionType"}
-            name={"optionType"}
-            dropdownArr={optionTypes}
-            Select={"Select Option Type"}
-            labelText={"OptionType"}
-            selectedValue={data.optionType}
-            onChange={(e: any) => handleOnChangeOptionType(e)}
-            isDisabled={isEdit === "question" ? false : true}
-          /> */}
             <Dropdawn
               onChange={(e: any) => handleOnChangeCollege(e)}
               selectedValue={collegeName}
@@ -335,29 +280,6 @@ const CandidateAll: any = () => {
               Select={"Select college"}
               isDisabled={isEdit === "candidate" ? false : true}
             />
-            {/* <div className="form-group">
-              <label htmlFor="experience">Experience</label>
-              <div className="form-group-inner">
-                <div className="cmn-form-control">
-                  <select
-                    name="experience"
-                    id="experience"
-                    className="form-control"
-                    // ref={experienceRef}
-                    required
-                  >
-                    <option value="">Select Experience</option>
-                    <option value="0">0</option>
-                    <option value="1-2">1-2</option>
-                    <option value="3-4">3-4</option>
-                    <option value="5-6">5-6</option>
-                    <option value="7-8">7-8</option>
-                    <option value="9-10">9-10</option>
-                    <option value="10+">10+</option>
-                  </select>
-                </div>
-              </div>
-            </div> */}
             <Dropdawn
               onChange={handleOnChangeExperience}
               selectedValue={experience}
@@ -369,16 +291,8 @@ const CandidateAll: any = () => {
               isDisabled={isEdit === "candidate" ? false : true}
             />
             <div className="form-group">
-              {/* <label htmlFor="currentAddress">Current Address</label> */}
               <div className="form-group-inner">
                 <div className="cmn-form-control">
-                  {/* <textarea
-                    id="currentAddress"
-                    placeholder="CurrentAddress"
-                    className="form-control"
-                    // ref={currentAddressRef}
-                    required
-                  ></textarea> */}
                   <Textarea
                     labelText={"currentAddress"}
                     inputName={"currentAddress"}
@@ -394,18 +308,8 @@ const CandidateAll: any = () => {
               </div>
             </div>
             <div className="form-group">
-              {/* <label htmlFor="educationDetails">
-                Education Details : Last Semester Grade
-              </label> */}
               <div className="form-group-inner">
                 <div className="cmn-form-control">
-                  {/* <textarea
-                    id="educationDetails"
-                    placeholder="EducationDetails"
-                    className="form-control"
-                    // ref={educationDetailsRef}
-                    required
-                  ></textarea> */}
                   <Textarea
                     labelText={"Education Details : Last Semester Grade"}
                     inputName={"educationDetails"}
@@ -461,7 +365,6 @@ const CandidateAll: any = () => {
         </form>
       </div>
       ;
-      
     </>
   );
 };
