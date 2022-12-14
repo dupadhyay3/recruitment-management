@@ -1,18 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, useCallback } from "react";
-import { useDispatch } from 'react-redux'
+import { useDispatch } from "react-redux";
 
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import InputField from "../shared/Input";
 import axios from "axios";
 import { getToken, storeToken } from "../Services/LocalStorageService";
 import { user_token } from "../redux/features/counter/CounterSlice";
+import { ToastContainer, toast } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
 const Login = () => {
-  
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const token = getToken();
+  useEffect(() => {
+    if (token) {
+      navigate("/candidate-table");
+    }
+  }, [token]);
+  const showToastMessagelogin = () => {
+    toast.success("Login Success!", {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  };
+  const dispatch = useDispatch();
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+
   const handleSubmit = useCallback(
     (e: any) => {
       const response = {
@@ -25,16 +39,12 @@ const Login = () => {
           if (res.data.status !== "failed") {
             let token = res.data.token;
             storeToken(token);
-            alert("Login successfully");
-            dispatch(user_token(getToken()))
-            navigate('/candidate-table')
-            
-            
-            
-            
-          }
-          else{
-            alert("Login failed")
+
+            dispatch(user_token(getToken()));
+            showToastMessagelogin();
+            navigate("/candidate-table");
+          } else {
+            toast.success("Login Failed!")
           }
         })
         .catch((err) => {
@@ -53,8 +63,15 @@ const Login = () => {
             Login
           </h1>
           <form onSubmit={(e) => handleSubmit(e)} className="mt-6">
-            <InputField labelText={"Email"} inputType={"email"} inputName={"email"} inputValue={email} inputPlaceHolder={"email"}
-             onChange={setemail} id={"email"} />
+            <InputField
+              labelText={"Email"}
+              inputType={"email"}
+              inputName={"email"}
+              inputValue={email}
+              inputPlaceHolder={"email"}
+              onChange={setemail}
+              id={"email"}
+            />
             {/* <div className="mb-2">
               <label
                 htmlFor="email"
@@ -71,8 +88,15 @@ const Login = () => {
                 className="block w-full px-4 py-2 mt-2 text-neutral-700 bg-white border rounded-md focus:border-neutral-400 focus:ring-neutral-300 focus:outline-none focus:ring focus:ring-opacity-40"
               />
             </div> */}
-            <InputField labelText={"Password"} inputType={"password"} inputName={"password"} inputValue={password} inputPlaceHolder={"password"}
-             onChange={setPassword} id={"Password"} />
+            <InputField
+              labelText={"Password"}
+              inputType={"password"}
+              inputName={"password"}
+              inputValue={password}
+              inputPlaceHolder={"password"}
+              onChange={setPassword}
+              id={"Password"}
+            />
             {/* <div className="mb-2">
               <label
                 htmlFor="password"

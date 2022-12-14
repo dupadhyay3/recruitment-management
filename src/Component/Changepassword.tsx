@@ -1,12 +1,33 @@
 import React from "react";
 import { getToken } from "../Services/LocalStorageService";
 import { useCallback, useState } from "react";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css';
 const Changepassword = () => {
+  const navigate=useNavigate()
   const [password, setPassword] = useState("");
   const [password_confirmation, setConfirm_password] = useState("");
- 
+  const confirmReset = (e:any) => {
+e.preventDefault()
+    confirmAlert({
+      title: 'Confirm to submit',
+      message: 'Are you sure to do this.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: (e) => {handleSubmit(e)}
+        },
+        {
+          label: 'No',
+          onClick: () => false
+        }
+      ]
+    });
+  };
 
   const handleSubmit = useCallback(
     (e: any) => {
@@ -30,8 +51,8 @@ const Changepassword = () => {
         )
         .then((res) => {
           if (res.data.status) {
-            alert("reset password successfully");
-            // navigate('/management/candidate/table')
+            toast.success("Password change Success!");
+            navigate('/candidate-table')
           }
         })
         .catch((err) => {
@@ -39,7 +60,6 @@ const Changepassword = () => {
         });
 
       console.log(response);
-      e.preventDefault();
     },
     [password, password_confirmation]
   );
@@ -51,7 +71,7 @@ const Changepassword = () => {
           <h1 className="text-3xl font-semibold text-center text-neutral-700 uppercase">
             Change Password
           </h1>
-          <form onSubmit={(e) => handleSubmit(e)} className="mt-6">
+          <form onSubmit={(e) => confirmReset(e)} className="mt-6">
             <div className="mb-2">
               <label
                 htmlFor="Password"

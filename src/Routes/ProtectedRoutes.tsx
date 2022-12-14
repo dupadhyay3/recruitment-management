@@ -10,7 +10,7 @@ import Login from "../Component/Login";
 import ForgetPassword from "../Component/ForgetPassword";
 import ResetPassword from "../Component/ResetPassword";
 import CreateAccount from "../Component/CreateAccount";
-import Logout from "../Component/Logout";
+
 import { useSelector, useDispatch } from 'react-redux'
 import CandidateResult from "../Component/CandidateResult";
 const AdminRoutes = () => {
@@ -18,15 +18,16 @@ const AdminRoutes = () => {
   const [tokens, settoken] = useState<any>(getToken());
   const token=usertoken||tokens
   console.log("token", token);
+  
 
   return (
     <>
       <Routes>
-      <Route path="/" element={!token?<Login />:<Navigate to="/candidate-table" />} />
+      <Route path="/" element={<Login />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
         <Route path="/create-account" element={<CreateAccount />} />
-        <Route path="/logout" element={<Logout />} />
+      
         {/* <Route path="/dashboard" element={<Dashboard/>} /> */}
         <Route
           path="/change-password"
