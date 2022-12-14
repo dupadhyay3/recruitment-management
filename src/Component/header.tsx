@@ -2,11 +2,28 @@ import logo from "./../assets/images/atharva-brand-logo-dark.png";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { getToken } from "../Services/LocalStorageService";
+import { useNavigate, Link } from "react-router-dom";
+import { removeToken } from "../Services/LocalStorageService";
+import { ToastContainer, toast } from "react-toastify";
+import Dropdawn from "../shared/dropdawn";
+import Changepassword from "./Changepassword";
+
 function Header(props: any) {
   const [navbarOpen, setNavbarOpen] = useState(false);
-  const usertoken = useSelector((state:any) => state.counter.value)
+  const usertoken = useSelector((state: any) => state.counter.value);
   const [tokens, settoken] = useState<any>(getToken());
-  const token=usertoken||tokens
+  const [isMenuOpen, setIsMenuOpen] = useState<any>(false);
+  const token = usertoken || tokens;
+  const navigate = useNavigate();
+
+  const logout = () => {
+    setIsMenuOpen(false)
+    removeToken("token");
+    toast.success("Logout Success!");
+    navigate("/");
+    window.location.reload()
+  };
+
   return (
     <>
       <nav
@@ -42,65 +59,82 @@ function Header(props: any) {
             </button>
           </div>
 
-          {token?<div
-            className={
-              "lg:flex flex-grow items-center bg-white lg:bg-transparent lg:shadow-none" +
-              (navbarOpen ? " block rounded shadow-lg" : "")
-            }
-            id="example-navbar-warning"
-          >
-            <ul className="flex flex-col lg:flex-row list-none mr-auto">
-              <li className="flex items-center">
-                <a
-                  className={
-                    (props.transparent
-                      ? "lg:text-white lg:hover:text-gray-300 text-gray-800"
-                      : "text-gray-800 hover:text-gray-600") +
-                    " px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                  }
-                  href="/candidate-table"
-                >
-                  Candidate
-                </a>
-              </li>
-              <li>
-                <a
-                  className={
-                    (props.transparent
-                      ? "lg:text-white lg:hover:text-gray-300 text-gray-800"
-                      : "text-gray-800 hover:text-gray-600") +
-                    " px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                  }
-                  href="/question-table"
-                >
-                  <i
+          {token ? (
+            <div
+              className={
+                "lg:flex flex-grow items-center bg-white lg:bg-transparent lg:shadow-none" +
+                (navbarOpen ? " block rounded shadow-lg" : "")
+              }
+              id="example-navbar-warning"
+            >
+              <ul className="flex flex-col lg:flex-row list-none mr-auto">
+                <li className="flex items-center">
+                  <a
                     className={
                       (props.transparent
-                        ? "lg:text-gray-300 text-gray-500"
-                        : "text-gray-500") + "text-lg leading-lg mr-2"
+                        ? "lg:text-white lg:hover:text-gray-300 text-gray-800"
+                        : "text-gray-800 hover:text-gray-600") +
+                      " px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
                     }
-                  />
-                  Question
-                </a>
-              </li>
-            </ul>
-            <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
-              <li className="flex items-center">
-                <button
-                  className={
-                    (props.transparent
-                      ? "bg-white text-gray-800 active:bg-gray-100"
-                      : "bg-pink-500 text-white active:bg-pink-600") +
-                    " text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3"
-                  }
-                  type="button"
-                  style={{ transition: "all .15s ease" }}
+                    href="/candidate-table"
+                  >
+                    Candidate
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className={
+                      (props.transparent
+                        ? "lg:text-white lg:hover:text-gray-300 text-gray-800"
+                        : "text-gray-800 hover:text-gray-600") +
+                      " px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
+                    }
+                    href="/question-table"
+                  >
+                    <i
+                      className={
+                        (props.transparent
+                          ? "lg:text-gray-300 text-gray-500"
+                          : "text-gray-500") + "text-lg leading-lg mr-2"
+                      }
+                    />
+                    Question
+                  </a>
+                </li>
+              </ul>
+
+              <div className="inline-flex bg-white border rounded-md">
+                <span
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className="px-4 py-2 text-sm text-gray-600 hover:text-gray-700 hover:bg-gray-50 rounded-l-md"
                 >
-                  <a href="/logout">LogOut</a>
-                </button>
-              </li>
-            </ul>
-          </div>:null}
+                  Profile
+                </span>
+
+                <div className="relative">
+                  {isMenuOpen && (
+                    <div className="absolute right-0 z-10 w-56 mt-4 origin-top-right bg-white border border-gray-100 rounded-md shadow-lg">
+                      <div className="p-2">
+                        <span
+                          onClick={logout}
+                          className="block px-4 py-2 text-sm text-gray-500 rounded-lg hover:bg-gray-50 hover:text-gray-700"
+                        >
+                          Logout
+                        </span>
+                        <Link
+                          to="/change-password"
+                          onClick={() => setIsMenuOpen(false)}
+                          className="block px-4 py-2 text-sm text-gray-500 rounded-lg hover:bg-gray-50 hover:text-gray-700"
+                        >
+                          Change Password
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : null}
         </div>
       </nav>
     </>

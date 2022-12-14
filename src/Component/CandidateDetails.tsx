@@ -8,6 +8,8 @@ import Textarea from "../shared/textarea";
 import Dropdawn from "../shared/dropdawn";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'
 interface ICandidatedata {
   optionType?: string;
   firstName?: string;
@@ -28,6 +30,40 @@ interface ICandidatedata {
 }
 
 const CandidateAll: any = () => {
+  
+const confirmDelete = () => {
+    confirmAlert({
+      title: 'Confirm to submit',
+      message: 'Are you sure to do this.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {handleDelete()}
+        },
+        {
+          label: 'No',
+          onClick: () => false
+        }
+      ]
+    });
+  };
+  const confirmSubmit = (e:any) => {
+    e.preventDefault();
+    confirmAlert({
+      title: 'Confirm to submit',
+      message: 'Are you sure to do this.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: (e) => {handleSubmit(e)}
+        },
+        {
+          label: 'No',
+          onClick: () => false
+        }
+      ]
+    });
+  };
   const showToastMessageEdit = () => {
     toast.success("Edit Success!", {
       position: toast.POSITION.TOP_RIGHT,
@@ -109,7 +145,6 @@ const CandidateAll: any = () => {
   };
 
   const handleDelete = () => {
-    if (window.confirm("Please confirm, to delete") === true) {
       axios
         .delete(
           `${process.env.REACT_APP_API}/management/candidate/delete/${id}`
@@ -117,16 +152,18 @@ const CandidateAll: any = () => {
         .then((res) => {
           if (res.data.status) {
             showToastMessageDelete();
-            setTimeout(() => {
-              navigate("/candidate-table");
-            }, 3000);
+            navigate("/candidate-table");
+            // setTimeout(() => {
+             
+            // }, 2000);
           }
         })
         .catch((err) => {});
     }
-  };
+  
+  
+  
   const handleSubmit = (e: any) => {
-    e.preventDefault();
     const response = {
       firstName: firstName,
       middleName: middleName,
@@ -142,34 +179,40 @@ const CandidateAll: any = () => {
       experience: experience,
     };
 
-    if (window.confirm("Please confirm, to edit edit") === true) {
+   console.log(response);
+   
       axios
         .put(
           `${process.env.REACT_APP_API}/management/candidate/update/${id}`,
           response
         )
         .then((res) => {
+          console.log(res);
+          
           if (res.data.status) {
             showToastMessageEdit();
-            setTimeout(() => {
-              navigate("/candidate-table");
-            }, 3000);
+            navigate("/candidate-table");
+          
           }
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  };
+  
   return (
     <>
+   
       <ToastContainer />
-      <button onClick={() => setIsEdit("candidate")}>Edit Candidate</button>
+      <button onClick={() => setIsEdit("candidate")
+    } >Edit Candidate</button>
+     
       <br />
-      <button onClick={handleDelete}>Delete Candidate </button>
+      <button onClick={() => confirmDelete()}>Delete Candidate </button>
+      {/* <button onClick={() =>confirmations()} >submit</button> */}
       <div className="registration-from-main">
         <h2> Candidate Details</h2>
-        <form className="registration-from" onSubmit={(e) => handleSubmit(e)}>
+        <form className="registration-from" onSubmit={(e)=>confirmSubmit(e)}>
           <div className="rgstr-from-group">
             <div className="form-group form-group3">
               <div className="form-group-inner">

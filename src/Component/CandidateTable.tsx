@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Table } from "../shared/table/Table";
-
+import { CSVLink, CSVDownload } from "react-csv"
 interface ICandidatedata {
   firstName: string;
   middleName: String;
@@ -24,6 +24,8 @@ interface ICandidatedata {
 
 const CandidateTable = () => {
   const navigate = useNavigate();
+ 
+  
 
   const columns = [
     { accessor: "firstName", label: "Name" },
@@ -43,6 +45,8 @@ const CandidateTable = () => {
       .get(`${process.env.REACT_APP_API}/management/candidate/get`)
       .then((res: any) => {
         setRows(res.data);
+        console.log("setRows",rows);
+        
       })
       .catch((err) => {
         console.log(err);
@@ -59,6 +63,7 @@ const CandidateTable = () => {
 
   return (
     <>
+     <CSVLink data={rows} className="mr-0 text-blue-500">Export</CSVLink>
       <div>
         <Table
           rowsPerPage={15}
@@ -68,6 +73,7 @@ const CandidateTable = () => {
           onClickAction={handleClickAction}
           columns={columns}
         />
+        
       </div>
     </>
   );

@@ -4,7 +4,10 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import InputField from "../shared/Input";
 import Dropdawn from "../shared/dropdawn";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'
 interface IQuestiondata {
   question?: string;
   optionType?: String;
@@ -16,6 +19,49 @@ interface IQuestiondata {
 const QuestionDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const confirmDelete = () => {
+    confirmAlert({
+      title: 'Confirm to submit',
+      message: 'Are you sure to do this.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {handleDelete()}
+        },
+        {
+          label: 'No',
+          onClick: () => false
+        }
+      ]
+    });
+  };
+  const confirmSubmit = (e:any) => {
+    e.preventDefault();
+    confirmAlert({
+      title: 'Confirm to submit',
+      message: 'Are you sure to do this.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: (e) => {handleSubmit()}
+        },
+        {
+          label: 'No',
+          onClick: () => false
+        }
+      ]
+    });
+  };
+  const showToastMessageEdit = () => {
+    toast.success("Edit Success!", {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  };
+  const showToastMessageDelete = () => {
+    toast.success("Delete Success!", {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  };
 
   const optionTypes = [
     { name: "Single" },
@@ -99,8 +145,8 @@ const QuestionDetail = () => {
     } else handleOnChangeExistingOptions(index, e);
   };
 
-  const onSubmit = (e: any) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+   
     if (data.optionType === "Query") {
       data.options = [{ value: false, query: "" }];
       setData((pre) => ({ options: data.options, ...pre }));
@@ -110,9 +156,7 @@ const QuestionDetail = () => {
         data.optionType === "Query" ||
         data.ans.every((el) => data.options?.some((data) => el === data.title))
       ) {
-        if (
-          window.confirm("Are you want to sure to edit the question?") === true
-        ) {
+        
           axios
             .put(
               `${process.env.REACT_APP_API}/management/question/update/${id}`,
@@ -120,13 +164,17 @@ const QuestionDetail = () => {
             )
             .then((res) => {
               console.log(res);
-              navigate("/question-table");
-              alert("Question updated successfully");
+              showToastMessageEdit()
+              setTimeout(() => {
+                navigate("/question-table");
+              }, 2000);
+              
+             
             })
             .catch((err) => {
               console.log(err);
             });
-        }
+        
       } else {
         alert("Check answer!");
       }
@@ -134,33 +182,37 @@ const QuestionDetail = () => {
   };
 
   const handleDelete = () => {
-    if (
-      window.confirm("Are you want to sure to delete the question?") === true
-    ) {
+   
       axios
         .delete(`${process.env.REACT_APP_API}/management/question/delete/${id}`)
         .then((res) => {
           if (res.data.status) {
-            navigate("/question-table");
-            alert("Question deleted successfully");
+            showToastMessageDelete()
+            setTimeout(() => {
+              navigate("/question-table");
+            }, 2000);
+           
+            
           }
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  };
+  
 
   return (
     <>
+    <ToastContainer />
       <button onClick={() => setIsEdit("question")}>Edit Question</button>
       {data.optionType !== "Query" ? (
         <button onClick={() => setIsEdit("option")}>Edit Options</button>
       ) : null}
       <button onClick={() => setIsEdit("answer")}>Edit Answer</button>
-      <button onClick={() => handleDelete()}>Delete Question</button>
 
-      <form className="from" onSubmit={(e) => onSubmit(e)}>
+      <button onClick={() => confirmDelete()}>Delete Question</button>
+
+      <form className="from" onSubmit={(e) => confirmSubmit(e)}>
         <div className="from-group">
           <InputField
             id={"question"}
