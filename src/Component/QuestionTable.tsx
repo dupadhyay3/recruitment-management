@@ -9,7 +9,7 @@ interface IQuestiondata {
     optionType: String;
     _id : string
 }
-
+const question="Question"
 const QuestionTable = () => {
   const navigate = useNavigate();
   
@@ -36,9 +36,9 @@ const QuestionTable = () => {
   }, []);
   return (
     <>
-     <div>
-      <Table rowsPerPage={3} rows={rows} onClickName={questionfullInfo} columns={columns} />
-    </div> 
+     
+      <Table rowsPerPage={3} rows={rows} onClickName={questionfullInfo} columns={columns} heading={question} />
+    
     </>
   );
 };

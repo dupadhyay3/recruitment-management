@@ -24,8 +24,6 @@ interface ICandidatedata {
 
 const CandidateTable = () => {
   const navigate = useNavigate();
- 
-  
 
   const columns = [
     { accessor: "firstName", label: "Name" },
@@ -45,8 +43,6 @@ const CandidateTable = () => {
       .get(`${process.env.REACT_APP_API}/management/candidate/get`)
       .then((res: any) => {
         setRows(res.data);
-        console.log("setRows",rows);
-        
       })
       .catch((err) => {
         console.log(err);
@@ -60,20 +56,21 @@ const CandidateTable = () => {
   const handleClickAction = (id?: string, actionName?: string) => {
     navigate(`/candidate-result/${id}`);
   };
-
+const candidate="Candidate"
   return (
     <>
      <CSVLink data={rows} className="mr-0 text-blue-500">Export</CSVLink>
       <div>
-        <Table
-          rowsPerPage={15}
-          rows={rows}
-          onClickName={CandidatafullInfo}
-          actions={actions}
-          onClickAction={handleClickAction}
-          columns={columns}
-        />
-        
+          <Table
+            rowsPerPage={15}
+            rows={rows}
+            onClickName={CandidatafullInfo}
+            actions={actions}
+            onClickAction={handleClickAction}
+            columns={columns}
+            heading={candidate}
+          />
+      
       </div>
     </>
   );

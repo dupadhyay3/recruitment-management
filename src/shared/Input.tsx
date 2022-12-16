@@ -34,11 +34,11 @@ const InputField: FC<IInputField> = ({
   isDisabled
 }) => {
   return (
-    <div className={cn("mb-2", `${className}`)}>
+    <div className={cn("mb-4", `${className}`)}>
       <label
         htmlFor={`${id}`}
         className={cn(
-          "block text-sm font-semibold text-gray-800",
+          "form-label",
           `${labelClassName}`
         )}
       >
@@ -58,7 +58,7 @@ const InputField: FC<IInputField> = ({
         maxLength={maxLength}
         disabled={isDisabled}
         className={cn(
-          "block w-full px-4 py-2 mt-2 text-neutral-700 bg-white border rounded-md focus:border-neutral-400 focus:ring-neutral-300 focus:outline-none focus:ring focus:ring-opacity-40",
+          "form-control",
           `${inputClassName}`
         )}
       />

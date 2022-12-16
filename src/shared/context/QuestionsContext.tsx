@@ -30,7 +30,7 @@ export const QuestionContext = React.createContext<any>({
 function questionReducer(state: any, action: IAction) {
   switch (action.type) {
     case "GET_QUESTION":
-      let resData : any;
+      let resData: any;
       axios
         .get(
           `${process.env.REACT_APP_API}/management/question/get/${action.payload}`
@@ -39,7 +39,7 @@ function questionReducer(state: any, action: IAction) {
           resData = res?.data;
           console.log("res", resData);
         });
-      return {...state, ...resData};
+      return { ...state, ...resData };
     default:
       return state;
   }
