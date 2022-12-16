@@ -1,76 +1,85 @@
 import React from 'react'
-
+import logo from "./../assets/images/atharva-brand-logo-dark.png";
 const CreateAccount = () => {
   return (
   <>
-   <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
-        <div className="w-full p-6 m-auto bg-white rounded-md shadow-xl shadow-gray-600/40 ring-2 ring-neutral-600 lg:max-w-xl">
-          <h1 className="text-3xl font-semibold text-center text-neutral-700 uppercase">
-            Create Account
-          </h1>
-          <form  className="mt-6">
-          <div className="mb-2">
-              <label
-                htmlFor="name"
-                className="block text-sm font-semibold text-gray-800"
-              >
-                Name
-              </label>
-              <input
-                type="text"
-                placeholder="name"
-                
-                className="block w-full px-4 py-2 mt-2 text-neutral-700 bg-white border rounded-md focus:border-neutral-400 focus:ring-neutral-300 focus:outline-none focus:ring focus:ring-opacity-40"
-              />
+   <div className="min-h-screen flex items-center justify-center">
+        <div className="mx-auto w-full max-w-[450px]">
+        <div className="text-center pb-6">
+          <img className="mx-auto" src={logo} alt="Atharva System" />
+        </div>
+          <div className='card'>
+            <div className='card-header text-center'>
+              <h3 className='font-[600] text-[26px] text-black'>Create Account</h3>
             </div>
-            <div className="mb-2">
-              <label
-                htmlFor="email"
-                className="block text-sm font-semibold text-gray-800"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                placeholder="email"
-                
-                className="block w-full px-4 py-2 mt-2 text-neutral-700 bg-white border rounded-md focus:border-neutral-400 focus:ring-neutral-300 focus:outline-none focus:ring focus:ring-opacity-40"
-              />
+            <div className='card-body'>
+              <form>
+                <div className="mb-4">
+                  <label
+                    htmlFor="name"
+                    className="form-label"
+                  >
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="name"
+                    
+                    className="form-control"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    htmlFor="email"
+                    className="form-label"
+                  >
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="email"
+                    
+                    className="form-control"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    htmlFor="password"
+                    className="form-label"
+                  >
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    placeholder="Password"
+                  
+                    className="form-control"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    htmlFor="confirm_password"
+                    className="form-label"
+                  >
+                    Confirm password
+                  </label>
+                  <input
+                    type="pasconfirm_passwordsword"
+                    placeholder="Confirm Password"
+                  
+                    className="form-control"
+                  />
+                </div>
+                <div className="mt-6">
+                  <button className="w-full btn btn-primary">
+                    Sign Up
+                  </button>
+                </div>
+              </form>
+              <p className="m-0 text-center pt-3">Already have an account? <a className="text-blue-600 hover:text-blue-700" href="/">Login</a></p>
             </div>
-            <div className="mb-2">
-              <label
-                htmlFor="password"
-                className="block text-sm font-semibold text-gray-800"
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                placeholder="Password"
-               
-                className="block w-full px-4 py-2 mt-2 text-neutral-700 bg-white border rounded-md focus:border-neutral-400 focus:ring-neutral-300 focus:outline-none focus:ring focus:ring-opacity-40"
-              />
-            </div>
-            <div className="mb-2">
-              <label
-                htmlFor="confirm_password"
-                className="block text-sm font-semibold text-gray-800"
-              >
-                confirm password
-              </label>
-              <input
-                type="pasconfirm_passwordsword"
-                placeholder="confirm_password"
-               
-                className="block w-full px-4 py-2 mt-2 text-neutral-700 bg-white border rounded-md focus:border-neutral-400 focus:ring-neutral-300 focus:outline-none focus:ring focus:ring-opacity-40"
-              />
-            </div>
-            <div className="mt-6">
-              <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-neutral-700 rounded-md hover:bg-neutral-600 focus:outline-none focus:bg-neutral-600">
-                Sign Up
-              </button>
-            </div>
-          </form>
+          </div>
+          
         </div>
       </div>
     </>

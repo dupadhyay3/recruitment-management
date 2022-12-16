@@ -31,7 +31,7 @@ const Dropdawn: FC<Idropdawn> = ({
         <label
           htmlFor={`${id}`}
           className={cn(
-            "block text-sm font-semibold text-gray-800",
+            "form-label",
             `${labelClassName}`
           )}
         >

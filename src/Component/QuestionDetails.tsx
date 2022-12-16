@@ -6,8 +6,8 @@ import InputField from "../shared/Input";
 import Dropdawn from "../shared/dropdawn";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css";
 interface IQuestiondata {
   question?: string;
   optionType?: String;
@@ -21,35 +21,45 @@ const QuestionDetail = () => {
   const navigate = useNavigate();
   const confirmDelete = () => {
     confirmAlert({
-      title: 'Confirm to submit',
-      message: 'Are you sure to do this.',
+      title: "Confirm to submit",
+      message: "Are you sure to do this.",
       buttons: [
         {
-          label: 'Yes',
-          onClick: () => {handleDelete()}
+          label: "Yes",
+          onClick: () => {
+            handleDelete();
+          },
         },
         {
-          label: 'No',
-          onClick: () => false
-        }
-      ]
+          label: "No",
+          onClick: () => {
+            navigate("/question-table");
+            return false;
+          },
+        },
+      ],
     });
   };
-  const confirmSubmit = (e:any) => {
+  const confirmSubmit = (e: any) => {
     e.preventDefault();
     confirmAlert({
-      title: 'Confirm to submit',
-      message: 'Are you sure to do this.',
+      title: "Confirm to submit",
+      message: "Are you sure to do this.",
       buttons: [
         {
-          label: 'Yes',
-          onClick: (e) => {handleSubmit()}
+          label: "Yes",
+          onClick: (e) => {
+            handleSubmit();
+          },
         },
         {
-          label: 'No',
-          onClick: () => false
-        }
-      ]
+          label: "No",
+          onClick: () => {
+            navigate("/question-table");
+            return false;
+          },
+        },
+      ],
     });
   };
   const showToastMessageEdit = () => {
@@ -146,7 +156,6 @@ const QuestionDetail = () => {
   };
 
   const handleSubmit = () => {
-   
     if (data.optionType === "Query") {
       data.options = [{ value: false, query: "" }];
       setData((pre) => ({ options: data.options, ...pre }));
@@ -156,25 +165,21 @@ const QuestionDetail = () => {
         data.optionType === "Query" ||
         data.ans.every((el) => data.options?.some((data) => el === data.title))
       ) {
-        
-          axios
-            .put(
-              `${process.env.REACT_APP_API}/management/question/update/${id}`,
-              data
-            )
-            .then((res) => {
-              console.log(res);
-              showToastMessageEdit()
-              setTimeout(() => {
-                navigate("/question-table");
-              }, 2000);
-              
-             
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        
+        axios
+          .put(
+            `${process.env.REACT_APP_API}/management/question/update/${id}`,
+            data
+          )
+          .then((res) => {
+            console.log(res);
+            showToastMessageEdit();
+            setTimeout(() => {
+              navigate("/question-table");
+            }, 2000);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       } else {
         alert("Check answer!");
       }
@@ -182,198 +187,236 @@ const QuestionDetail = () => {
   };
 
   const handleDelete = () => {
-   
-      axios
-        .delete(`${process.env.REACT_APP_API}/management/question/delete/${id}`)
-        .then((res) => {
-          if (res.data.status) {
-            showToastMessageDelete()
-            setTimeout(() => {
-              navigate("/question-table");
-            }, 2000);
-           
-            
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  
+    axios
+      .delete(`${process.env.REACT_APP_API}/management/question/delete/${id}`)
+      .then((res) => {
+        if (res.data.status) {
+          showToastMessageDelete();
+          setTimeout(() => {
+            navigate("/question-table");
+          }, 2000);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const onBack = () => {
+    navigate("/question-table");
+  };
 
   return (
     <>
-    <ToastContainer />
-      <button onClick={() => setIsEdit("question")}>Edit Question</button>
-      {data.optionType !== "Query" ? (
-        <button onClick={() => setIsEdit("option")}>Edit Options</button>
-      ) : null}
-      <button onClick={() => setIsEdit("answer")}>Edit Answer</button>
+      <div className="card">
+        <div className="card-header flex items-center">
+          <div className="">
+            <h5 className="card-header-title">Question</h5>
+          </div>
+          <div className="ml-auto">
+            <button
+              className="btn btn-sm btn-dark mr-3"
+              onClick={() => setIsEdit("question")}
+            >
+              Edit Question
+            </button>
+            {data.optionType !== "Query" ? (
+              <button
+                className="btn btn-sm btn-dark mr-3"
+                onClick={() => setIsEdit("option")}
+              >
+                Edit Options
+              </button>
+            ) : null}
+            <button
+              className="btn btn-sm btn-dark mr-3"
+              onClick={() => setIsEdit("answer")}
+            >
+              Edit Answer
+            </button>
+            <button
+              className="btn btn-sm btn-primary mr-3"
+              onClick={() => handleDelete()}
+            >
+              Delete Question
+            </button>
+            <button
+              className="btn btn-sm btn-primary mr-3"
+              onClick={() => onBack()}
+            >
+              Back
+            </button>
+          </div>
+        </div>
 
-      <button onClick={() => confirmDelete()}>Delete Question</button>
+        <form className="from" onSubmit={(e) => confirmSubmit(e)}>
+          <div className="card-body">
+            <InputField
+              id={"question"}
+              labelText={"Question"}
+              inputType={"text"}
+              inputValue={data.question}
+              inputPlaceHolder={"Question"}
+              onChange={handleOnchangeQuestion}
+              isDisabled={isEdit === "question" ? false : true}
+            />
 
-      <form className="from" onSubmit={(e) => confirmSubmit(e)}>
-        <div className="from-group">
-          <InputField
-            id={"question"}
-            labelText={"Question"}
-            inputType={"text"}
-            inputValue={data.question}
-            inputPlaceHolder={"Question"}
-            onChange={handleOnchangeQuestion}
-            isDisabled={isEdit === "question" ? false : true}
-          />
+            <Dropdawn
+              id={"optionType"}
+              name={"optionType"}
+              dropdownArr={optionTypes}
+              Select={"Select Option Type"}
+              labelText={"OptionType"}
+              selectedValue={data.optionType}
+              onChange={(e: any) => handleOnChangeOptionType(e)}
+              isDisabled={isEdit === "question" ? false : true}
+            />
 
-          <Dropdawn
-            id={"optionType"}
-            name={"optionType"}
-            dropdownArr={optionTypes}
-            Select={"Select Option Type"}
-            labelText={"OptionType"}
-            selectedValue={data.optionType}
-            onChange={(e: any) => handleOnChangeOptionType(e)}
-            isDisabled={isEdit === "question" ? false : true}
-          />
-
-          {!isEdit || isEdit === "answer" ? (
-            <ul className="question-list">
-              {data?.options?.map((option, index) => {
-                return (
-                  <li key={`${index}-${data?._id}`}>
-                    {data?.optionType === "Multiple" ? (
-                      <input
-                        type="checkbox"
-                        id={`custom-checkbox-${index}-${data?._id}`}
-                        name={option?.title}
-                        checked={data.ans?.includes(option?.title)}
-                        onChange={(e) => handleOnChangeCheckbox(index, e)}
-                        disabled={
-                          isEdit === "option" || isEdit === "answer"
-                            ? false
-                            : true
-                        }
-                      />
-                    ) : data?.optionType === "Query" && !index ? (
-                      <div>
-                        <label htmlFor="query">SQL Query Answer</label>
-                        <textarea
+            {!isEdit || isEdit === "answer" ? (
+              <ul className="question-list">
+                {data?.options?.map((option, index) => {
+                  return (
+                    <li key={`${index}-${data?._id}`}>
+                      {data?.optionType === "Multiple" ? (
+                        <input
+                          type="checkbox"
                           id={`custom-checkbox-${index}-${data?._id}`}
-                          name={option?._id}
-                          defaultValue={data.ans?.length ? data.ans[0] : ""}
-                          onChange={(e) => handleOnChangeQuery(index, e)}
+                          name={option?.title}
+                          checked={data.ans?.includes(option?.title)}
+                          onChange={(e) => handleOnChangeCheckbox(index, e)}
                           disabled={
                             isEdit === "option" || isEdit === "answer"
                               ? false
                               : true
                           }
-                        ></textarea>
-                      </div>
-                    ) : data.optionType === "Single" ? (
-                      <input
-                        type="radio"
-                        value={option?.title}
-                        id={`custom-checkbox-${index}-${data?._id}`}
-                        name={option?.title}
-                        checked={data.ans?.includes(option?.title)}
-                        onChange={(e) => handleOnChangeRadio(index, e)}
-                        disabled={
-                          isEdit === "option" || isEdit === "answer"
-                            ? false
-                            : true
-                        }
-                      />
-                    ) : null}
+                        />
+                      ) : data?.optionType === "Query" && !index ? (
+                        <div>
+                          <label className="form-label" htmlFor="query">
+                            SQL Query Answer
+                          </label>
+                          <textarea
+                            id={`custom-checkbox-${index}-${data?._id}`}
+                            className={`form-control`}
+                            name={option?._id}
+                            defaultValue={data.ans?.length ? data.ans[0] : ""}
+                            onChange={(e) => handleOnChangeQuery(index, e)}
+                            disabled={
+                              isEdit === "option" || isEdit === "answer"
+                                ? false
+                                : true
+                            }
+                          ></textarea>
+                        </div>
+                      ) : data.optionType === "Single" ? (
+                        <input
+                          type="radio"
+                          value={option?.title}
+                          id={`custom-checkbox-${index}-${data?._id}`}
+                          name={option?.title}
+                          checked={data.ans?.includes(option?.title)}
+                          onChange={(e) => handleOnChangeRadio(index, e)}
+                          disabled={
+                            isEdit === "option" || isEdit === "answer"
+                              ? false
+                              : true
+                          }
+                        />
+                      ) : null}
 
-                    {data.optionType !== "Query" ? (
-                      <label htmlFor={`custom-checkbox-${index}-${data?._id}`}>
-                        {option?.title}
-                      </label>
-                    ) : null}
-                  </li>
-                );
-              })}
-            </ul>
-          ) : isEdit === "option" ? (
-            <ul className="question-list">
-              {data?.options?.length === 4 &&
-                data?.options?.map((option, index) => {
-                  return (
-                    <li key={`${index}-${data?._id}`}>
-                      <input
-                        type="text"
-                        value={option?.title}
-                        id={`custom-checkbox-${index}-${data?._id}`}
-                        name={option?.title}
-                        onChange={(e) =>
-                          handleOnChangeExistingOptions(index, e)
-                        }
-                      />
+                      {data.optionType !== "Query" ? (
+                        <label
+                          htmlFor={`custom-checkbox-${index}-${data?._id}`}
+                        >
+                          {option?.title}
+                        </label>
+                      ) : null}
                     </li>
                   );
                 })}
+              </ul>
+            ) : isEdit === "option" ? (
+              <ul className="question-list">
+                {data?.options?.length === 4 &&
+                  data?.options?.map((option, index) => {
+                    return (
+                      <li className="pb-3" key={`${index}-${data?._id}`}>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={option?.title}
+                          id={`custom-checkbox-${index}-${data?._id}`}
+                          name={option?.title}
+                          onChange={(e) =>
+                            handleOnChangeExistingOptions(index, e)
+                          }
+                        />
+                      </li>
+                    );
+                  })}
 
-              {data?.options?.length !== 4 && (
-                <div>
-                  <input
-                    type="text"
-                    value={
-                      data?.options?.length
-                        ? data?.options[0].title
+                {data?.options?.length !== 4 && (
+                  <div>
+                    <input
+                      type="text"
+                      value={
+                        data?.options?.length
                           ? data?.options[0].title
-                          : data?.options[0].query
-                        : ""
-                    }
-                    id="option1"
-                    required
-                    onChange={(e) => handleOnChangeoptions(0, e)}
-                  />
-                  <input
-                    type="text"
-                    value={
-                      data?.options?.length && data?.options[1]
-                        ? data?.options[1].title
-                        : ""
-                    }
-                    id="option2"
-                    required
-                    onChange={(e) => handleOnChangeoptions(1, e)}
-                  />
-                  <input
-                    type="text"
-                    value={
-                      data?.options?.length && data?.options[2]
-                        ? data?.options[2].title
-                        : ""
-                    }
-                    id="option3"
-                    required
-                    onChange={(e) => handleOnChangeoptions(2, e)}
-                  />
-                  <input
-                    type="text"
-                    value={
-                      data?.options?.length && data?.options[3]
-                        ? data?.options[3].title
-                        : ""
-                    }
-                    id="option4"
-                    required
-                    onChange={(e) => handleOnChangeoptions(3, e)}
-                  />
-                </div>
-              )}
-            </ul>
-          ) : null}
-
+                            ? data?.options[0].title
+                            : data?.options[0].query
+                          : ""
+                      }
+                      id="option1"
+                      required
+                      onChange={(e) => handleOnChangeoptions(0, e)}
+                    />
+                    <input
+                      type="text"
+                      value={
+                        data?.options?.length && data?.options[1]
+                          ? data?.options[1].title
+                          : ""
+                      }
+                      id="option2"
+                      required
+                      onChange={(e) => handleOnChangeoptions(1, e)}
+                    />
+                    <input
+                      type="text"
+                      value={
+                        data?.options?.length && data?.options[2]
+                          ? data?.options[2].title
+                          : ""
+                      }
+                      id="option3"
+                      required
+                      onChange={(e) => handleOnChangeoptions(2, e)}
+                    />
+                    <input
+                      type="text"
+                      value={
+                        data?.options?.length && data?.options[3]
+                          ? data?.options[3].title
+                          : ""
+                      }
+                      id="option4"
+                      required
+                      onChange={(e) => handleOnChangeoptions(3, e)}
+                    />
+                  </div>
+                )}
+              </ul>
+            ) : null}
+          </div>
           {isEdit ? (
-            <div className="form-group">
-              <button type="submit" className="cmn-btn submit-btn">
+            <div className="card-footer flex">
+              <button type="submit" className="btn btn-sm btn-primary mr-3">
                 Submit
               </button>
             </div>
           ) : null}
-        </div>
-      </form>
+        </form>
+      </div>
     </>
   );
 };

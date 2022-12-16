@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
+import logo from "./../assets/images/atharva-brand-logo-dark.png";
 import { useState, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch } from 'react-redux'
 
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import InputField from "../shared/Input";
 import axios from "axios";
 import { getToken, storeToken } from "../Services/LocalStorageService";
@@ -57,21 +58,22 @@ const Login = () => {
   );
   return (
     <>
-      <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
-        <div className="w-full p-6 m-auto bg-white rounded-md shadow-xl shadow-gray-600/40 ring-2 ring-neutral-600 lg:max-w-xl">
-          <h1 className="text-3xl font-semibold text-center text-neutral-700 uppercase">
-            Login
-          </h1>
-          <form onSubmit={(e) => handleSubmit(e)} className="mt-6">
-            <InputField
-              labelText={"Email"}
-              inputType={"email"}
-              inputName={"email"}
-              inputValue={email}
-              inputPlaceHolder={"email"}
-              onChange={setemail}
-              id={"email"}
-            />
+
+    <div className="min-h-screen flex items-center justify-center py-10">
+      <div className="mx-auto w-full max-w-[450px]">
+
+      <div className="text-center pb-6">
+        <img className="mx-auto" src={logo} alt="Atharva System" />
+      </div>
+    
+      <div className="card">
+        <div className="card-header text-center">
+            <h3 className="font-[600] text-[26px] text-black">Login</h3>
+        </div>
+        <div className="card-body">
+        <form onSubmit={(e) => handleSubmit(e)} className="mt-6">
+            <InputField labelText={"Email"} inputType={"email"} inputName={"email"} inputValue={email} inputPlaceHolder={"Email"}
+             onChange={setemail} id={"email"} />
             {/* <div className="mb-2">
               <label
                 htmlFor="email"
@@ -88,15 +90,8 @@ const Login = () => {
                 className="block w-full px-4 py-2 mt-2 text-neutral-700 bg-white border rounded-md focus:border-neutral-400 focus:ring-neutral-300 focus:outline-none focus:ring focus:ring-opacity-40"
               />
             </div> */}
-            <InputField
-              labelText={"Password"}
-              inputType={"password"}
-              inputName={"password"}
-              inputValue={password}
-              inputPlaceHolder={"password"}
-              onChange={setPassword}
-              id={"Password"}
-            />
+            <InputField labelText={"Password"} inputType={"password"} inputName={"password"} inputValue={password} inputPlaceHolder={"Password"}
+             onChange={setPassword} id={"Password"} />
             {/* <div className="mb-2">
               <label
                 htmlFor="password"
@@ -115,33 +110,26 @@ const Login = () => {
             </div> */}
 
             <div className="mt-6">
-              <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-neutral-700 rounded-md hover:bg-neutral-600 focus:outline-none focus:bg-neutral-600">
+              <button className="w-full btn btn-primary">
                 Login
               </button>
               {/* {success?<div className="text-green-600/100">{success}</div>:null} */}
             </div>
           </form>
-
-          <div className="flex items-center justify-between mt-5">
-            <div className="text-sm">
-              <a
-                href="/create-account"
-                className="font-medium text-neutral-600 hover:underline"
-              >
-                Create an Account?
-              </a>
-            </div>
-            <div className="text-sm">
-              <a
+          <p className="m-0 text-center pt-6">
+            <a
                 href="/forget-password"
-                className="font-medium text-neutral-600 hover:underline"
+                className="text-blue-600 hover:text-blue-700"
               >
                 Forgot Password?
               </a>
-            </div>
-          </div>
+          </p>
+          <p className="m-0 text-center pt-3">Don't have an account yet? <a className="text-blue-600 hover:text-blue-700" href="/create-account">Sign up</a></p>
         </div>
       </div>
+
+      </div>
+    </div>
     </>
   );
 };
