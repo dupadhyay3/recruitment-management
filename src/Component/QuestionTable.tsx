@@ -37,7 +37,7 @@ const QuestionTable = () => {
   return (
     <>
      
-      <Table rowsPerPage={3} rows={rows} onClickName={questionfullInfo} columns={columns} heading={question} />
+      <Table rowsPerPage={6} rows={rows} onClickName={questionfullInfo} columns={columns} heading={question} />
     
     </>
   );

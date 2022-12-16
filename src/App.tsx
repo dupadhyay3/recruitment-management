@@ -17,12 +17,14 @@ function App() {
         <div className="bg-ef bg-4"></div>
       </div>
 
-      <main className="app-wrapper">
+      <div className="app-root">
         <BrowserRouter>
           <Header /> 
-          <AdminRoutes/>
+          <main className="app-wrapper">
+            <AdminRoutes/>
+          </main>
         </BrowserRouter>
-      </main>
+      </div>
     </>
   );
 }

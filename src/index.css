@@ -212,6 +212,9 @@ body {
 }
 
 .app-main {
+    @apply flex-[0_0_100%] max-w-[100%] pl-0;
+}
+.app-sidebar ~ .app-main {
     @apply flex-[0_0_calc(100%_-_250px)] max-w-[calc(100%_-_250px)] pl-4;
 }
 
@@ -238,7 +241,7 @@ body {
 }
 
 .sorting {
-    @apply w-full flex relative after:absolute before:absolute before:content-['_▲'] after:content-['_▼'];
+    @apply w-full flex pr-[40px] relative after:absolute before:absolute before:content-['_▲'] after:content-['_▼'] cursor-pointer;
 }
 
 .sorting::before,

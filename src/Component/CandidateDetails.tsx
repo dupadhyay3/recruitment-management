@@ -8,8 +8,8 @@ import Textarea from "../shared/textarea";
 import Dropdawn from "../shared/dropdawn";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css";
 interface ICandidatedata {
   optionType?: string;
   firstName?: string;
@@ -30,38 +30,47 @@ interface ICandidatedata {
 }
 
 const CandidateAll: any = () => {
-  
-const confirmDelete = () => {
+  const confirmDelete = () => {
     confirmAlert({
-      title: 'Confirm to submit',
-      message: 'Are you sure to do this.',
+      title: "Confirm to submit",
+      message: "Are you sure to do this.",
       buttons: [
         {
-          label: 'Yes',
-          onClick: () => {handleDelete()}
+          label: "Yes",
+          onClick: () => {
+            handleDelete();
+          },
         },
         {
-          label: 'No',
-          onClick: () => false
-        }
-      ]
+          label: "No",
+          onClick: () => {
+            navigate("/candidate-table");
+            return false;
+          },
+        },
+      ],
     });
   };
-  const confirmSubmit = (e:any) => {
+  const confirmSubmit = (e: any) => {
     e.preventDefault();
     confirmAlert({
-      title: 'Confirm to submit',
-      message: 'Are you sure to do this.',
+      title: "Confirm to submit",
+      message: "Are you sure to do this.",
       buttons: [
         {
-          label: 'Yes',
-          onClick: (e) => {handleSubmit(e)}
+          label: "Yes",
+          onClick: (e) => {
+            handleSubmit(e);
+          },
         },
         {
-          label: 'No',
-          onClick: () => false
-        }
-      ]
+          label: "No",
+          onClick: () => {
+            navigate("/candidate-table");
+            return false;
+          },
+        },
+      ],
     });
   };
   const showToastMessageEdit = () => {
@@ -88,7 +97,7 @@ const confirmDelete = () => {
       name: "3-4",
     },
   ];
- const navigate=useNavigate()
+  const navigate = useNavigate();
   const [data, setData] = useState<ICandidatedata>({});
   const [collegeNames, setcollegeNames] = useState<any[]>([]);
   const [isEdit, setIsEdit] = useState<string>("");
@@ -168,24 +177,20 @@ const confirmDelete = () => {
   };
 
   const handleDelete = () => {
-      axios
-        .delete(
-          `${process.env.REACT_APP_API}/management/candidate/delete/${id}`
-        )
-        .then((res) => {
-          if (res.data.status) {
-            showToastMessageDelete();
-            navigate("/candidate-table");
-            // setTimeout(() => {
-             
-            // }, 2000);
-          }
-        })
-        .catch((err) => {});
-    }
-  
-  
-  
+    axios
+      .delete(`${process.env.REACT_APP_API}/management/candidate/delete/${id}`)
+      .then((res) => {
+        if (res.data.status) {
+          showToastMessageDelete();
+          navigate("/candidate-table");
+          // setTimeout(() => {
+
+          // }, 2000);
+        }
+      })
+      .catch((err) => {});
+  };
+
   const handleSubmit = (e: any) => {
     const response = {
       firstName: firstName,
@@ -202,34 +207,48 @@ const confirmDelete = () => {
       experience: experience,
     };
 
-   console.log(response);
-   
-      axios
-        .put(
-          `${process.env.REACT_APP_API}/management/candidate/update/${id}`,
-          response
-        )
-        .then((res) => {
-          if (res.data.status) {
-            showToastMessageEdit();
-            navigate("/candidate-table");
-          
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    console.log(response);
+
+    axios
+      .put(
+        `${process.env.REACT_APP_API}/management/candidate/update/${id}`,
+        response
+      )
+      .then((res) => {
+        if (res.data.status) {
+          showToastMessageEdit();
+          navigate("/candidate-table");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const onBack = () => {
+    navigate("/candidate-table");
+  };
 
   return (
     <>
-      
       <div className="card">
         <div className="card-header flex items-center">
-          <div><h5 className="card-header-title">Candidate Details</h5></div>
+          <div>
+            <h5 className="card-header-title">Candidate Details</h5>
+          </div>
           <div className="ml-auto flex">
-            <button className="btn btn-sm btn-dark mr-3" onClick={() => setIsEdit("candidate")}>Edit</button>
-            <button className="btn btn-sm btn-primary" onClick={confirmDelete}>Delete</button>
+            <button
+              className="btn btn-sm btn-dark mr-3"
+              onClick={() => setIsEdit("candidate")}
+            >
+              Edit
+            </button>
+            <button className="btn btn-sm btn-primary mr-3" onClick={confirmDelete}>
+              Delete
+            </button>
+            <button className="btn btn-sm btn-primary" onClick={() => onBack()}>
+              Back
+            </button>
           </div>
         </div>
         <form onSubmit={(e) => confirmSubmit(e)}>
@@ -238,16 +257,16 @@ const confirmDelete = () => {
 
             <div className="grid grid-cols-12 gap-4">
               <div className="col-span-12 md:col-span-6 lg:col-span-4">
-                  <InputField
-                      labelText={"FirstName"}
-                      inputType={"text"}
-                      inputName={"FirstName"}
-                      inputValue={firstName}
-                      inputPlaceHolder={"FirstName"}
-                      onChange={setfirstName}
-                      id={"firstName"}
-                      isDisabled={isEdit === "candidate" ? false : true}
-                    />
+                <InputField
+                  labelText={"FirstName"}
+                  inputType={"text"}
+                  inputName={"FirstName"}
+                  inputValue={firstName}
+                  inputPlaceHolder={"FirstName"}
+                  onChange={setfirstName}
+                  id={"firstName"}
+                  isDisabled={isEdit === "candidate" ? false : true}
+                />
               </div>
               <div className="col-span-12 md:col-span-6 lg:col-span-4">
                 <InputField
@@ -308,17 +327,17 @@ const confirmDelete = () => {
               </div>
               <div className="col-span-12 md:col-span-6">
                 <InputField
-                      labelText={"Mobile NO."}
-                      inputType={"text"}
-                      inputName={"phone"}
-                      inputValue={mobileNo}
-                      inputPlaceHolder={"mobileNo"}
-                      minLength={10}
-                      maxLength={10}
-                      onChange={setmobileNo}
-                      id={"phone"}
-                      isDisabled={isEdit === "candidate" ? false : true}
-                    />
+                  labelText={"Mobile NO."}
+                  inputType={"text"}
+                  inputName={"phone"}
+                  inputValue={mobileNo}
+                  inputPlaceHolder={"mobileNo"}
+                  minLength={10}
+                  maxLength={10}
+                  onChange={setmobileNo}
+                  id={"phone"}
+                  isDisabled={isEdit === "candidate" ? false : true}
+                />
               </div>
               <div className="col-span-12">
                 <Dropdawn
@@ -358,17 +377,17 @@ const confirmDelete = () => {
                 />
               </div>
               <div className="col-span-12">
-                  <Textarea
-                    labelText={"Education Details : Last Semester Grade"}
-                    inputName={"educationDetails"}
-                    inputValue={educationDetails}
-                    inputPlaceHolder={"EducationDetails"}
-                    onChange={seteducationDetails}
-                    isDisabled={isEdit === "candidate" ? false : true}
-                    id={"educationDetails"}
-                    rows={"4"}
-                    class={"form-control"}
-                  />
+                <Textarea
+                  labelText={"Education Details : Last Semester Grade"}
+                  inputName={"educationDetails"}
+                  inputValue={educationDetails}
+                  inputPlaceHolder={"EducationDetails"}
+                  onChange={seteducationDetails}
+                  isDisabled={isEdit === "candidate" ? false : true}
+                  id={"educationDetails"}
+                  rows={"4"}
+                  class={"form-control"}
+                />
               </div>
               <div className="col-span-12">
                 <Textarea
@@ -397,13 +416,14 @@ const confirmDelete = () => {
                 />
               </div>
             </div>
-          </div>
-          {" "}
-            {isEdit ?
+          </div>{" "}
+          {isEdit ? (
             <div className="card-footer">
-              <button className="btn btn-sm btn-primary" type="submit">Submit</button> 
+              <button className="btn btn-sm btn-primary" type="submit">
+                Submit
+              </button>
             </div>
-          : null}
+          ) : null}
         </form>
       </div>
     </>

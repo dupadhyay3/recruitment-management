@@ -6,8 +6,8 @@ import InputField from "../shared/Input";
 import Dropdawn from "../shared/dropdawn";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css";
 interface IQuestiondata {
   question?: string;
   optionType?: String;
@@ -21,35 +21,45 @@ const QuestionDetail = () => {
   const navigate = useNavigate();
   const confirmDelete = () => {
     confirmAlert({
-      title: 'Confirm to submit',
-      message: 'Are you sure to do this.',
+      title: "Confirm to submit",
+      message: "Are you sure to do this.",
       buttons: [
         {
-          label: 'Yes',
-          onClick: () => {handleDelete()}
+          label: "Yes",
+          onClick: () => {
+            handleDelete();
+          },
         },
         {
-          label: 'No',
-          onClick: () => false
-        }
-      ]
+          label: "No",
+          onClick: () => {
+            navigate("/question-table");
+            return false;
+          },
+        },
+      ],
     });
   };
-  const confirmSubmit = (e:any) => {
+  const confirmSubmit = (e: any) => {
     e.preventDefault();
     confirmAlert({
-      title: 'Confirm to submit',
-      message: 'Are you sure to do this.',
+      title: "Confirm to submit",
+      message: "Are you sure to do this.",
       buttons: [
         {
-          label: 'Yes',
-          onClick: (e) => {handleSubmit()}
+          label: "Yes",
+          onClick: (e) => {
+            handleSubmit();
+          },
         },
         {
-          label: 'No',
-          onClick: () => false
-        }
-      ]
+          label: "No",
+          onClick: () => {
+            navigate("/question-table");
+            return false;
+          },
+        },
+      ],
     });
   };
   const showToastMessageEdit = () => {
@@ -146,7 +156,6 @@ const QuestionDetail = () => {
   };
 
   const handleSubmit = () => {
-   
     if (data.optionType === "Query") {
       data.options = [{ value: false, query: "" }];
       setData((pre) => ({ options: data.options, ...pre }));
@@ -156,25 +165,21 @@ const QuestionDetail = () => {
         data.optionType === "Query" ||
         data.ans.every((el) => data.options?.some((data) => el === data.title))
       ) {
-        
-          axios
-            .put(
-              `${process.env.REACT_APP_API}/management/question/update/${id}`,
-              data
-            )
-            .then((res) => {
-              console.log(res);
-              showToastMessageEdit()
-              setTimeout(() => {
+        axios
+          .put(
+            `${process.env.REACT_APP_API}/management/question/update/${id}`,
+            data
+          )
+          .then((res) => {
+            console.log(res);
+            showToastMessageEdit();
+            setTimeout(() => {
               navigate("/question-table");
-              }, 2000);
-              
-             
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        
+            }, 2000);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       } else {
         alert("Check answer!");
       }
@@ -182,44 +187,70 @@ const QuestionDetail = () => {
   };
 
   const handleDelete = () => {
-   
-      axios
-        .delete(`${process.env.REACT_APP_API}/management/question/delete/${id}`)
-        .then((res) => {
-          if (res.data.status) {
-            showToastMessageDelete()
-            setTimeout(() => {
+    axios
+      .delete(`${process.env.REACT_APP_API}/management/question/delete/${id}`)
+      .then((res) => {
+        if (res.data.status) {
+          showToastMessageDelete();
+          setTimeout(() => {
             navigate("/question-table");
-            }, 2000);
-           
-            
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  
+          }, 2000);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const onBack = () => {
+    navigate("/question-table");
+  };
 
   return (
     <>
-    <div className="card">
-      <div className="card-header flex items-center">
-        <div className="">
-          <h5 className="card-header-title">Question</h5>
+      <div className="card">
+        <div className="card-header flex items-center">
+          <div className="">
+            <h5 className="card-header-title">Question</h5>
+          </div>
+          <div className="ml-auto">
+            <button
+              className="btn btn-sm btn-dark mr-3"
+              onClick={() => setIsEdit("question")}
+            >
+              Edit Question
+            </button>
+            {data.optionType !== "Query" ? (
+              <button
+                className="btn btn-sm btn-dark mr-3"
+                onClick={() => setIsEdit("option")}
+              >
+                Edit Options
+              </button>
+            ) : null}
+            <button
+              className="btn btn-sm btn-dark mr-3"
+              onClick={() => setIsEdit("answer")}
+            >
+              Edit Answer
+            </button>
+            <button
+              className="btn btn-sm btn-primary mr-3"
+              onClick={() => handleDelete()}
+            >
+              Delete Question
+            </button>
+            <button
+              className="btn btn-sm btn-primary mr-3"
+              onClick={() => onBack()}
+            >
+              Back
+            </button>
+          </div>
         </div>
-        <div className="ml-auto">
-          <button className="btn btn-sm btn-dark mr-3" onClick={() => setIsEdit("question")}>Edit Question</button>
-          {data.optionType !== "Query" ? (
-            <button className="btn btn-sm btn-dark mr-3" onClick={() => setIsEdit("option")}>Edit Options</button>
-          ) : null}
-          <button className="btn btn-sm btn-dark mr-3" onClick={() => setIsEdit("answer")}>Edit Answer</button>
-          <button className="btn btn-sm btn-primary mr-3" onClick={() => handleDelete()}>Delete Question</button>
-        </div>
-      </div>
-      
+
         <form className="from" onSubmit={(e) => confirmSubmit(e)}>
-        <div className="card-body">
+          <div className="card-body">
             <InputField
               id={"question"}
               labelText={"Question"}
@@ -261,7 +292,9 @@ const QuestionDetail = () => {
                         />
                       ) : data?.optionType === "Query" && !index ? (
                         <div>
-                          <label className="form-label" htmlFor="query">SQL Query Answer</label>
+                          <label className="form-label" htmlFor="query">
+                            SQL Query Answer
+                          </label>
                           <textarea
                             id={`custom-checkbox-${index}-${data?._id}`}
                             className={`form-control`}
@@ -292,7 +325,9 @@ const QuestionDetail = () => {
                       ) : null}
 
                       {data.optionType !== "Query" ? (
-                        <label htmlFor={`custom-checkbox-${index}-${data?._id}`}>
+                        <label
+                          htmlFor={`custom-checkbox-${index}-${data?._id}`}
+                        >
                           {option?.title}
                         </label>
                       ) : null}
@@ -372,21 +407,16 @@ const QuestionDetail = () => {
                 )}
               </ul>
             ) : null}
+          </div>
+          {isEdit ? (
+            <div className="card-footer flex">
+              <button type="submit" className="btn btn-sm btn-primary mr-3">
+                Submit
+              </button>
             </div>
-            {isEdit ? (
-              <div className="card-footer flex">
-                <button type="submit" className="btn btn-sm btn-primary mr-3">
-                  Submit
-                </button>
-              </div>
-            ) : null}
-          
+          ) : null}
         </form>
       </div>
-
-      
-
-      
     </>
   );
 };

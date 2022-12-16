@@ -59,10 +59,11 @@ const CandidateTable = () => {
 const candidate="Candidate"
   return (
     <>
-     <CSVLink data={rows} className="mr-0 text-blue-500">Export</CSVLink>
+    
       <div>
+      <CSVLink data={rows} className="mr-0 text-blue-500">Export</CSVLink>
           <Table
-            rowsPerPage={15}
+            rowsPerPage={6}
             rows={rows}
             onClickName={CandidatafullInfo}
             actions={actions}

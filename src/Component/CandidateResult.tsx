@@ -47,6 +47,8 @@ const CandidateResult = () => {
                           res.data[0].questionAnswer[index].RealAns
                         )
                     );
+                } else if (response.data.optionType === "Query") {
+                  res.data[0].questionAnswer[index]["isCorrect"] = "Query";
                 }
                 console.log("simmilar", response.data);
               }
